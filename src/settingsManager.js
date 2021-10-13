@@ -25,10 +25,11 @@ function getSettings() {
 }
 
 function updateSetting(setting, option) {
-    let activeSettings = getSettings();
-    activeSettings[setting] = option;
-    settingsCache = activeSettings;
-  fs.writeFileSync(settingsFile, activeSettings);
+  let activeSettings = getSettings();
+  activeSettings[setting] = option;
+  settingsCache = activeSettings;
+  fs.writeFileSync(settingsFile, JSON.stringify(activeSettings));
+  console.log(setting + " updated to " + option);
 }
 
 export {getSettings, updateSetting}

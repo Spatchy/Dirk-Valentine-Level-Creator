@@ -9,7 +9,8 @@
 export default {
   mounted() {
     window.ipc.on("OPEN_FILE_DIALOG", (response) => {
-      alert(response)
+      alert(response);
+      window.ipc.send("UPDATE_SETTING", ["flashpointPath", response]);
     })
   },
 

@@ -9,13 +9,23 @@ export default {
   }),
 
   openFileDialog: ipcMain.on("OPEN_FILE_DIALOG", async (event, payload) => {
-    const result = await dialog.showOpenDialog(mainWindow, payload);
+    let result = await dialog.showOpenDialog(mainWindow, payload)
+      .catch((e) => {
+        console.log(e);
+      })
+    result = result.filePaths[0];
+    console.log(result);
     event.reply("OPEN_FILE_DIALOG", result);
   }),
 
   updateflashpointDir: ipcMain.on("UPDATE_FLASHPOINT_DIR", (event, payload) => {
     console.log(Path.dirname(payload[1].path))
     updateSetting(payload[0], Path.dirname(payload[1].path));
+  }),
+
+  updateSetting: ipcMain.on("UPDATE_SETTING", (event, payload) => {
+    console.log(payload);
+    updateSetting(payload[0], payload[1]);
   })
 
 }
