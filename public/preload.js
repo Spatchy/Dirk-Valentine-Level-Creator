@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-const validChannels = ["OPEN_EXTERNAL", "UPDATE_FLASHPOINT_DIR", "OPEN_FILE_DIALOG"];
+const validChannels = ["OPEN_EXTERNAL", "UPDATE_FLASHPOINT_DIR", "OPEN_FILE_DIALOG", "UPDATE_SETTING"];
 contextBridge.exposeInMainWorld(
   'ipc', {
     send: (channel, data) => {
