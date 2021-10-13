@@ -1,7 +1,7 @@
 <template>
   <div>
     To start, please select your Flashpoint Core folder. You can download Flashpoint Core from <a href="_blank" @click="openInBrowser(`https://bluemaxima.org/flashpoint/downloads/`)"> the official site </a>
-    <input type="file" ref="flashpoint" @click="getDirectoryName"/>
+    <button @click="getDirectoryName">Select Flashpoint Folder</button>
   </div>
 </template>
 
