@@ -29,7 +29,6 @@ function updateSetting(setting, option) {
   activeSettings[setting] = option;
   settingsCache = activeSettings;
   fs.writeFileSync(settingsFile, JSON.stringify(activeSettings));
-  console.log(setting + " updated to " + option);
 }
 
 export {getSettings, updateSetting}

@@ -14,7 +14,6 @@ export default {
         console.log(e);
       })
     result = result.filePaths[0];
-    console.log(result);
     event.reply("OPEN_FILE_DIALOG", result);
   }),
 
@@ -24,7 +23,6 @@ export default {
   }),
 
   updateSetting: ipcMain.on("UPDATE_SETTING", (event, payload) => {
-    console.log(payload);
     updateSetting(payload[0], payload[1]);
   })
 
