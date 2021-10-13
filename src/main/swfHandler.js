@@ -10,7 +10,7 @@ export default {
       fs.mkdirSync(location);
     }
     const file = fs.createWriteStream(location + "dirkvalentine.swf");
-    get("http://cdn.nitrome.com/games/dirkvalentine/dirkvalentine.swf", (response) => {
+    get("http://www.nitrome.com/games/dirkvalentine/dirkvalentine.swf", (response) => {
       response.pipe(file);
     });
   }
