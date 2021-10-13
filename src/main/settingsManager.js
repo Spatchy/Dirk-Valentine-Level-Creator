@@ -1,7 +1,8 @@
 import fs from "fs";
 import {app} from "electron";
 
-const settingsFile = app.getPath('userData') + "/settings.json"
+const appdata = app.getPath('userData');
+const settingsFile = appdata + "/settings.json"
 
 const defaults = {
   "flashpointPath":"",
@@ -9,27 +10,28 @@ const defaults = {
 
 let settingsCache = {};
 
-// returns settings from the file or the defaults if file doesn't exist
-function getSettings() {
-  let settings;
-  if (settingsCache != {}) {
-    return settingsCache
+export default {
+
+  // returns settings from the file or the defaults if file doesn't exist
+  getSettings() {
+    let settings;
+    if (settingsCache != {}) {
+      return settingsCache
+    }
+    else if (fs.existsSync(settingsFile)) {
+      settings = fs.readFileSync(settingsFile);
+    }
+    else {
+      settings = defaults;
+    }
+    return settings;
+  },
+  
+  updateSetting(setting, option) {
+    let activeSettings = getSettings();
+    activeSettings[setting] = option;
+    settingsCache = activeSettings;
+    fs.writeFileSync(settingsFile, JSON.stringify(activeSettings));
   }
-  else if (fs.existsSync(settingsFile)) {
-    settings = fs.readFileSync(settingsFile);
-  }
-  else {
-    settings = defaults;
-  }
-  return settings;
+  
 }
-
-function updateSetting(setting, option) {
-  let activeSettings = getSettings();
-  activeSettings[setting] = option;
-  settingsCache = activeSettings;
-  fs.writeFileSync(settingsFile, JSON.stringify(activeSettings));
-}
-
-export {getSettings, updateSetting}
-
