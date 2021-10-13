@@ -32,6 +32,10 @@ export default {
     activeSettings[setting] = option;
     settingsCache = activeSettings;
     fs.writeFileSync(settingsFile, JSON.stringify(activeSettings));
+  },
+
+  getSetting(settingToGet) {
+    return settingsCache[settingToGet];
   }
   
 }
