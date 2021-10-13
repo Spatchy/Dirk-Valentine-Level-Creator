@@ -1,5 +1,7 @@
 import { shell, ipcMain, dialog, mainWindow } from "electron"
-import {updateSetting} from "./settingsManager";
+import settingsManager from "./settingsManager";
+//import ptyHandler from "./ptyHandler";
+import swfHandler from "./swfHandler";
 import Path from "path";
 
 export default {
@@ -19,11 +21,15 @@ export default {
 
   updateflashpointDir: ipcMain.on("UPDATE_FLASHPOINT_DIR", (event, payload) => {
     console.log(Path.dirname(payload[1].path))
-    updateSetting(payload[0], Path.dirname(payload[1].path));
+    settingsManager.updateSetting(payload[0], Path.dirname(payload[1].path));
   }),
 
   updateSetting: ipcMain.on("UPDATE_SETTING", (event, payload) => {
-    updateSetting(payload[0], payload[1]);
+    settingsManager.updateSetting(payload[0], payload[1]);
+  }),
+
+  test: ipcMain.on("TEST", (event, payload) => {
+    swfHandler.downloadSwf();
   })
 
 }
