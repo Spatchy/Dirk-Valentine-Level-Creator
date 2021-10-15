@@ -12,6 +12,8 @@ let settingsCache = {};
 
 export default {
 
+  appdata,
+
   // returns settings from the file or the defaults if file doesn't exist
   getSettings() {
     let settings;
