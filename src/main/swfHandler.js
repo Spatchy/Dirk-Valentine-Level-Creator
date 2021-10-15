@@ -1,8 +1,8 @@
 import { get } from 'http';
 import fs from 'fs';
-import { app } from "electron";
+import settingsManager from './settingsManager';
 
-const location = app.getPath("userData") + "/projects/";
+const location = settingsManager.appdata + "/projects/";
 
 export default {
   downloadSwf() {
