@@ -28,6 +28,14 @@ export default {
     settingsManager.updateSetting(payload[0], payload[1]);
   }),
 
+  getSettings: ipcMain.on("GET_SETTINGS", (event, payload) => {
+    let responseObject = {}
+    payload.forEach(element => {
+      responseObject[element] = settingsManager.getSetting(element);
+    });
+    event.reply("GET_SETTINGS", responseObject);
+  }),
+
   test: ipcMain.on("TEST", (event, payload) => {
     swfHandler.downloadSwf();
   })
