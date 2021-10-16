@@ -1,5 +1,5 @@
 <template>
-
+  <div>test success</div>
 </template>
 
 <script>
