@@ -1,15 +1,39 @@
 <template>
-  <Init/>
+<div>
+  <div v-if="isValidSettings === null">Checking settings</div>
+  <Init v-else-if="!isValidSettings" />
+  <Builder v-else />
+</div>
 </template>
 
 <script>
-import Init from './views/init.vue'
+import Builder from './views/builder.vue';
+import Init from './views/init.vue';
 
 export default {
   name: 'App',
   components: {
-    Init
-  }
+    Init,
+    Builder
+  },
+  data() {
+    return {
+      isValidSettings: null
+    }
+  },
+  mounted() {
+    window.ipc.send("GET_SETTINGS", ["swftoolsPath", "flashpointPath"]);
+    
+    window.ipc.on("GET_SETTINGS", (response) => {
+      let tempValid = true;
+      Object.keys(response).forEach(element => { //Check everything in the response is not empty
+        if(!response[element]){
+          tempValid = false;
+        }
+      });
+      this.isValidSettings = tempValid;
+    })
+  },
 }
 </script>
 
