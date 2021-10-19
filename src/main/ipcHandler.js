@@ -1,8 +1,8 @@
 import { shell, ipcMain, dialog, mainWindow } from "electron"
 import settingsManager from "./settingsManager";
-//import ptyHandler from "./ptyHandler";
 import swfHandler from "./swfHandler";
 import Path from "path";
+import ptyHandler from "./ptyHandler";
 
 export default {
 
@@ -36,8 +36,18 @@ export default {
     event.reply("GET_SETTINGS", responseObject);
   }),
 
+  downloadSwf: ipcMain.on("DOWNLOAD_EXTRACT_SWF", (event, data) => {
+    swfHandler.downloadSwf(() => {
+      event.reply("DOWNLOAD_EXTRACT_SWF", {"Downloaded progress":"Complete"})
+      ptyHandler.useSwfextract( reply => {
+        event.reply("DOWNLOAD_EXTRACT_SWF", reply);
+      })
+    });
+  }),
+
   test: ipcMain.on("TEST", (event, payload) => {
-    swfHandler.downloadSwf();
+    console.log("test IPC triggered");
+    ptyHandler.useSwfextract();
   })
 
 }
