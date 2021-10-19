@@ -35,7 +35,7 @@ export default {
     });
   },
 
-  useSwfextract() {
+  useSwfextract(callback) {
     console.log("Extracting SWF file assets");
     const swftoolsPath = settingsManager.getSetting("swftoolsPath");
     this.setPtyLocation(swftoolsPath);
@@ -55,7 +55,7 @@ export default {
         const fileCount = fs.readdirSync(extractFolder).length;
         if(fileCount > count) {
           count = fileCount;
-          console.log("executed " + count + " of " + numToExtract);
+          callback({"Extract progress":[count, numToExtract]});
         }
         if(count === numToExtract) {
           console.log("Done!")

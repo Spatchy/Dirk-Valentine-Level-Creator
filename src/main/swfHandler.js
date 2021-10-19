@@ -5,7 +5,7 @@ import settingsManager from './settingsManager';
 const location = settingsManager.appdata + "/projects/";
 
 export default {
-  downloadSwf() {
+  downloadSwf(callback) {
     if (!fs.existsSync(location)){
       fs.mkdirSync(location);
     }
@@ -13,5 +13,8 @@ export default {
     get("http://www.nitrome.com/games/dirkvalentine/dirkvalentine.swf", (response) => {
       response.pipe(file);
     });
+    file.on('finish', () => {
+      callback();
+    })
   }
 }
