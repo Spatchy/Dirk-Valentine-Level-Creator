@@ -3,6 +3,7 @@ import settingsManager from "./settingsManager";
 import swfHandler from "./swfHandler";
 import Path from "path";
 import ptyHandler from "./ptyHandler";
+import tileHandler from "./tileHandler";
 
 export default {
 
@@ -42,6 +43,12 @@ export default {
       ptyHandler.useSwfextract( reply => {
         event.reply("DOWNLOAD_EXTRACT_SWF", reply);
       })
+    });
+  }),
+
+  getTiles: ipcMain.on("GET_TILES", (event, payload) => {
+    tileHandler.tileLibrary.forEach(tile => {
+      event.reply("GET_TILES", tile);
     });
   }),
 
