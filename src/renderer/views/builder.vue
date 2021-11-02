@@ -9,12 +9,12 @@
 export default {
   data() {
     return {
-      tileset = [],
+      tileset: [],
     }
   },
   mounted() {
     window.ipc.on("GET_TILES", response => {
-      tileset.push(response);
+      this.tileset.push(response);
     })
   },
   methods: {

@@ -47,7 +47,7 @@ class Tile {
 }
 
 export default {
-  tileLibrary = [
+  tileLibrary: [
     new Tile(0, "air", null),
     new Tile(1, "sign", "1345.png"),
     new Tile(2, "unarmored-center", "449.png"),
