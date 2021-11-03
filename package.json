@@ -14,7 +14,7 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
-    "merge-images": "^2.0.0",
+    "merge-images-v2": "^2.0.1",
     "node-pty": "^0.10.1",
     "replace-color": "^2.3.0",
     "vue": "^3.0.0"
@@ -27,6 +27,7 @@
     "babel-eslint": "^10.1.0",
     "electron": "^13.0.0",
     "electron-devtools-installer": "^3.1.0",
+    "electron-rebuild": "^3.2.3",
     "eslint-plugin-vue": "^7.0.0",
     "vue-cli-plugin-electron-builder": "^2.1.1"
   },
