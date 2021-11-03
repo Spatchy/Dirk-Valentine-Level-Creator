@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require('electron');
+const mergeImages = require('merge-images-v2');
 
 const validChannels = [
   "OPEN_EXTERNAL", 
@@ -24,5 +25,13 @@ contextBridge.exposeInMainWorld(
         ipcRenderer.on(channel, (event, ...args) => func(...args));
       }
     },
-  },
+  }
 );
+
+contextBridge.exposeInMainWorld(
+  'mergeImages', {
+    merge: (arr, callback) => {
+      mergeImages(arr).then(b64 => callback(b64));
+    }
+  }
+)
