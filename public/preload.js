@@ -8,6 +8,7 @@ const validChannels = [
   "TEST", 
   "GET_SETTINGS",
   "DOWNLOAD_EXTRACT_SWF",
+  "GET_TILES",
 ];
 
 contextBridge.exposeInMainWorld(
