@@ -1,34 +1,42 @@
 <template>
   <div>
-    <button @click="test()">trigger test</button>
     <div>{{tileset.length}}</div>
     <img :src="mergeTest" alt="">
+    <tile-menu :tileSet="tileset" :selectedTile="selectedTile" @selectTile="changeSelectedTile($event)"> </tile-menu>
   </div>
 </template>
 
 <script>
+import tileMenu from "../components/tileMenu.vue"
+
 export default {
+  name: "builder",
   data() {
     return {
       tileset: [],
       mergeTest: null,
+      selectedTile: 0,
     }
   },
+  components: {
+    tileMenu
+  },
   mounted() {
+    window.ipc.send("GET_TILES", "");
+
     window.ipc.on("GET_TILES", response => {
       this.tileset.push(response);
       if(this.tileset.length == 52){
         console.log(this.tileset);
-        window.mergeImages.merge(["data:image/png;base64," + this.tileset[19].tileImage, "data:image/png;base64," + this.tileset[40].tileImage], (b64) => {
+        window.mergeImages.merge([this.tileset[19].tileImage, this.tileset[40].tileImage], (b64) => {
           this.mergeTest = b64;
         });
-        console.log(this.mergeTest);
       }
     })
   },
   methods: {
-    test() {
-      window.ipc.send("GET_TILES", "");
+    changeSelectedTile(tileId) {
+      this.selectedTile = tileId
     }
   }
 }
