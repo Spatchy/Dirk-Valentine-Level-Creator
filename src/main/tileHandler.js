@@ -24,7 +24,7 @@ class Tile {
     if(path === null) {
       return emptyB64Image;
     }
-    return fs.readFileSync(path, {encoding: 'base64'})
+    return "data:image/png;base64, " + fs.readFileSync(path, {encoding: 'base64'})
   }
 
   pathArrToBase64(pathArr) {
