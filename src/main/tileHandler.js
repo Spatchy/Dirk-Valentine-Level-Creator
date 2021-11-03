@@ -1,9 +1,8 @@
-const mergeImages = require('merge-images');
-const { Canvas, Image } = require('canvas');
 import fs from "fs";
 import settingsManager from "./settingsManager";
 
 const extractPath = settingsManager.appdata + "/projects/extract";
+const emptyB64Image = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
 
 class Tile {
   constructor(number, name, baseLayer, additionalLayers = [], width = 1, height = 1) {
@@ -21,15 +20,10 @@ class Tile {
     this.tileImage = b64;
   }
 
-  assembleLayers(additionalLayers) {
-    mergeImages(additionalLayers.unshift(this.baseLayer), {
-      Canvas: Canvas,
-      Image: Image
-    })
-      .then(b64 => this.setTileImage(b64));
-  }
-
   pathToBase64(path) {
+    if(path === null) {
+      return emptyB64Image;
+    }
     return fs.readFileSync(path, {encoding: 'base64'})
   }
 
@@ -42,6 +36,9 @@ class Tile {
   }
 
   mkPath(file) {
+    if(file === null) {
+      return null;
+    }
     return extractPath + "/" + file;
   }
 }
