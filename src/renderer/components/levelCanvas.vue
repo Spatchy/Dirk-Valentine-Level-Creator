@@ -42,8 +42,10 @@ export default {
     },
 
     placeTile(tile, x, y) {
-      const ctx = this.refs.levelCanvas.getContext("2d")
-      ctx.drawImage(tile.tileImage, x, y)
+      const ctx = this.$refs.levelCanvas.getContext("2d")
+      const imageElem = new Image()
+      imageElem.src = tile.tileImage
+      ctx.drawImage(imageElem, x, y)
     }
   }
 }
@@ -53,5 +55,6 @@ export default {
   canvas {
     border-width: 1px;
     border-color: black;
+    border-style: solid;
   }
 </style>
