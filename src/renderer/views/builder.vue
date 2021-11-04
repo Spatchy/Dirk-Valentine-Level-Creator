@@ -3,11 +3,13 @@
     <div>{{tileset.length}}</div>
     <img :src="mergeTest" alt="">
     <tile-menu :tileSet="tileset" :selectedTile="selectedTile" @selectTile="changeSelectedTile($event)"> </tile-menu>
+    <level-canvas :tilesWidth="8" :tilesHeight="8" :selectedTile="selectedTile" :tileSet="tileset"></level-canvas>
   </div>
 </template>
 
 <script>
 import tileMenu from "../components/tileMenu.vue"
+import levelCanvas from "../components/levelCanvas.vue"
 
 export default {
   name: "builder",
@@ -19,7 +21,8 @@ export default {
     }
   },
   components: {
-    tileMenu
+    tileMenu,
+    levelCanvas,
   },
   mounted() {
     window.ipc.send("GET_TILES", "");
