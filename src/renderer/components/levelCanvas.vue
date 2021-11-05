@@ -46,6 +46,7 @@ export default {
       const imageElem = new Image()
       imageElem.src = tile.tileImage
       ctx.drawImage(imageElem, x, y)
+      window.ipc.send("INSERT_TILE", [tile.number, x/64, y/64])
     }
   }
 }
