@@ -10,6 +10,8 @@ const validChannels = [
   "GET_SETTINGS",
   "DOWNLOAD_EXTRACT_SWF",
   "GET_TILES",
+  "CREATE_LEVEL",
+  "INSERT_TILE",
 ];
 
 contextBridge.exposeInMainWorld(
