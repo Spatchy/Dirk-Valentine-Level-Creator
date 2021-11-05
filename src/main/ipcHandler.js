@@ -4,6 +4,7 @@ import swfHandler from "./swfHandler";
 import Path from "path";
 import ptyHandler from "./ptyHandler";
 import tileHandler from "./tileHandler";
+import projectHandler from "./projectHandler";
 
 export default {
 
@@ -50,6 +51,16 @@ export default {
     tileHandler.tileLibrary.forEach(tile => {
       event.reply("GET_TILES", tile);
     });
+  }),
+
+  createLevel: ipcMain.on("CREATE_LEVEL", (event, payload) => {
+    projectHandler.createLevel(payload[0], payload[1])
+  }),
+
+  insertTile: ipcMain.on("INSERT_TILE", (event, payload) => {
+    projectHandler.getActiveLevel().insertTile(payload[0], payload[1], payload[2])
+    console.log(projectHandler.getActiveLevel())
+    event.reply("INSERT_TILE", projectHandler.getActiveLevel())
   }),
 
   test: ipcMain.on("TEST", (event, payload) => {
