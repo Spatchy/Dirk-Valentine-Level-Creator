@@ -26,6 +26,7 @@ export default {
   },
   mounted() {
     window.ipc.send("GET_TILES", "");
+    window.ipc.send("CREATE_LEVEL", [8, 8]) // testing purposes only
 
     window.ipc.on("GET_TILES", response => {
       this.tileset.push(response);
