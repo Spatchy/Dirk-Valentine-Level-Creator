@@ -3,7 +3,7 @@
     <div>{{tileset.length}}</div>
     <img :src="mergeTest" alt="">
     <tile-menu :tileSet="tileset" :selectedTile="selectedTile" @selectTile="changeSelectedTile($event)"> </tile-menu>
-    <level-canvas :tilesWidth="8" :tilesHeight="8" :selectedTile="selectedTile" :tileSet="tileset"></level-canvas>
+    <level-canvas :tilesWidth="newLevelWidth" :tilesHeight="newLevelHeight" :selectedTile="selectedTile" :tileSet="tileset"></level-canvas>
   </div>
 </template>
 
@@ -20,13 +20,16 @@ export default {
       selectedTile: 0,
     }
   },
+  props: {
+    newLevelWidth: Number,
+    newLevelHeight: Number,
+  },
   components: {
     tileMenu,
     levelCanvas,
   },
   mounted() {
     window.ipc.send("GET_TILES", "");
-    window.ipc.send("CREATE_LEVEL", [8, 8]) // testing purposes only
 
     window.ipc.on("GET_TILES", response => {
       this.tileset.push(response);
