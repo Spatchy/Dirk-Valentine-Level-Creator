@@ -35,6 +35,49 @@ class levelData {
     console.log("id: " + tileId + " x: " + x + " y: " + y)
     this.layers[layer][y][x] = tileId
   }
+  toggleInsideOutside() {
+    this.outside = !this.outside
+  }
+  setStartPoint(x, y) {
+    this.startX = x
+    this.startY = y
+  }
+  changeWidth(newWidth) {
+    const loopMax = Math.abs(newWidth-this.width) // determine how many columns to add or remove
+    this.layers.forEach(layer => {
+      layer.forEach(row => {
+        for(let i = 0; i < loopMax; i++) {
+          if(newWidth > this.width) {
+            row.push(0)
+          }
+          else if(newWidth < this.width) {
+            row.pop()
+          }
+        }
+      })
+    });
+    this.width = newWidth
+  }
+  changeHeight(newHeight) {
+    const loopMax = Math.abs(newHeight - this.height)
+    this.layers.forEach(layer => {
+      if(newHeight > this.height) {
+        const arr = []
+        for(let i = 0; i < this.width; i++) { // build empty row
+          arr.push(0)
+        }
+        for(let i = 0; i < loopMax; i++) {
+          layer.push(arr.slice()) // use empty slice to obtain a safe copy of arr
+        }
+      }
+      else if(newHeight < this.height) {
+        for(let i = 0; i < loopMax; i++) {
+          layer.pop()
+        }
+      }
+    })
+    this.height = newHeight
+  }
   getLevelLayers() {
     return this.layers
   }
