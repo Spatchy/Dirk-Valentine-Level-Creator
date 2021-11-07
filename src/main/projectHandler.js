@@ -47,6 +47,9 @@ class levelData {
       "outside": this.outside,
     }
   }
+  getSignMessages() {
+    return this.signMessages
+  }
 }
 
 let activeLevel = null;
