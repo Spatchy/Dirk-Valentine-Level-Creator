@@ -1,6 +1,13 @@
 class levelData {
-  constructor(width, height) {
-    this.levelArray = this.make2dArray(width, height)
+  constructor(width, height, startX = 0, startY = 0, outside = false) {
+    this.width = width
+    this.height = height
+    this.startX = startX
+    this.startY = startY
+    this.outside = outside
+    this.layers = []
+    this.signMessages = []
+    this.addLayer()
   }
   make2dArray(width, height) {
     const arr = []
@@ -13,12 +20,32 @@ class levelData {
     }
     return arr
   }
-  insertTile(tileId, x, y) {
-    console.log("id: " + tileId + " x: " + x + " y: " + y)
-    this.levelArray[y][x] = tileId
+  addLayer() {
+    this.layers.push(this.make2dArray(this.width, this.height))
   }
-  getLevelArray() {
-    return this.levelArray
+  addSignMessage(layer, n, text) {
+    const sign = {
+      "layer": layer,
+      "n": n,
+      "text": text,
+    }
+    this.signMessages.push(sign)
+  }
+  insertTile(tileId, x, y, layer = 0) {
+    console.log("id: " + tileId + " x: " + x + " y: " + y)
+    this.layers[layer][y][x] = tileId
+  }
+  getLevelLayers() {
+    return this.layers
+  }
+  getLevelMeta() {
+    return {
+      "width": this.width,
+      "height": this.height,
+      "start_x": this.startX,
+      "start_y": this.startY,
+      "outside": this.outside,
+    }
   }
 }
 
