@@ -17,7 +17,8 @@
     "merge-images-v2": "^2.0.1",
     "node-pty": "^0.10.1",
     "replace-color": "^2.3.0",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.15",
