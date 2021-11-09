@@ -5,6 +5,7 @@ import Path from "path";
 import ptyHandler from "./ptyHandler";
 import tileHandler from "./tileHandler";
 import projectHandler from "./projectHandler";
+import xmlHandler from "./xmlHandler";
 
 export default {
 
@@ -58,9 +59,12 @@ export default {
   }),
 
   insertTile: ipcMain.on("INSERT_TILE", (event, payload) => {
-    projectHandler.getActiveLevel().insertTile(payload[0], payload[1], payload[2])
-    console.log(projectHandler.getActiveLevel())
+    projectHandler.getActiveLevel().insertTile(payload[0], payload[1], payload[2]) // add layers to this when implemented
     event.reply("INSERT_TILE", projectHandler.getActiveLevel())
+  }),
+
+  saveLevel: ipcMain.on("SAVE_LEVEL", (event, payload) => {
+    xmlHandler.saveLevelData(projectHandler.getActiveLevel())
   }),
 
   test: ipcMain.on("TEST", (event, payload) => {
