@@ -1,8 +1,4 @@
-import fs from "fs";
-import settingsManager from "./settingsManager";
-
-const extractPath = settingsManager.appdata + "/projects/extract";
-const emptyB64Image = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+import miscAssetHandler from "./miscAssetHandler";
 
 class Tile {
   constructor(number, name, baseLayer, additionalLayers = [], width = 1, height = 1) {
@@ -10,36 +6,11 @@ class Tile {
     this.name = name;
     this.width = width;
     this.height = height;
-    this.tileImage = this.pathToBase64(this.mkPath(baseLayer));
-    if(additionalLayers.length > 0) {
-      this.assembleLayers(this.pathArrToBase64(additionalLayers));
-    }
+    this.tileImage = miscAssetHandler.pathToBase64(miscAssetHandler.mkPath(baseLayer));
   }
 
   setTileImage(b64){
     this.tileImage = b64;
-  }
-
-  pathToBase64(path) {
-    if(path === null) {
-      return emptyB64Image;
-    }
-    return "data:image/png;base64, " + fs.readFileSync(path, {encoding: 'base64'})
-  }
-
-  pathArrToBase64(pathArr) {
-    b64Arr = [];
-    pathArr.forEach(path => {
-      b64Arr.push(this.pathToBase64(this.mkPath(path)))
-    });
-    return b64Arr;
-  }
-
-  mkPath(file) {
-    if(file === null) {
-      return null;
-    }
-    return extractPath + "/" + file;
   }
 }
 
