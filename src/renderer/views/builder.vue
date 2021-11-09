@@ -19,6 +19,7 @@ export default {
       tileset: [],
       mergeTest: null,
       selectedTile: 0,
+      selectedLayer: 0,
     }
   },
   props: {
