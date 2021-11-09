@@ -4,6 +4,7 @@
     <img :src="mergeTest" alt="">
     <tile-menu :tileSet="tileset" :selectedTile="selectedTile" @selectTile="changeSelectedTile($event)"> </tile-menu>
     <level-canvas :tilesWidth="newLevelWidth" :tilesHeight="newLevelHeight" :selectedTile="selectedTile" :tileSet="tileset"></level-canvas>
+    <button @click="saveLevel()">save level test</button>
   </div>
 </template>
 
@@ -44,6 +45,9 @@ export default {
   methods: {
     changeSelectedTile(tileId) {
       this.selectedTile = tileId
+    },
+    saveLevel() {
+      window.ipc.send("SAVE_LEVEL", "")
     }
   }
 }
