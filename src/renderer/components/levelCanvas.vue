@@ -1,10 +1,27 @@
 <template>
-  <canvas ref="levelCanvas" :height="canvasHeight" :width="canvasWidth" @click="canvasAction($event)"></canvas>
+  <canvas-toolbar
+    :initialisedIsOutside="true"
+    @changeBackground="changeBackground($event)"
+  />
+  <div ref="canvasStack" id="canvasStack">
+    <canvas ref="backGroundCanvas" :height="canvasHeight" :width="canvasWidth" style="z-index: -1"></canvas>
+    <canvas v-for="(n, i) in numberOfLayers" :key="i" :ref="`canvasLayer${i}`" :height="canvasHeight" :width="canvasWidth" :style="`z-index: ${i}`"></canvas>
+    <canvas ref="selectionCanvas" :height="canvasHeight" :width="canvasWidth" @click="canvasAction($event)" style="z-index: 99999"></canvas>
+  </div>
 </template>
 
 <script>
+import canvasToolbar from "./canvasToolbar.vue"
 export default {
   name: "levelCanvas",
+  components: {
+    canvasToolbar
+  },
+  data() {
+    return {
+      numberOfLayers: 3,
+    }
+  },
   props: {
     tilesWidth: Number,
     tilesHeight: Number,
@@ -47,6 +64,12 @@ export default {
       imageElem.src = tile.tileImage
       ctx.drawImage(imageElem, x, y)
       window.ipc.send("INSERT_TILE", [tile.number, x/64, y/64])
+    },
+    addLayer() {
+      this.numberOfLayers++
+    },
+    changeBackground(isOutside) {
+      console.log(isOutside)
     }
   }
 }
@@ -57,5 +80,8 @@ export default {
     border-width: 1px;
     border-color: black;
     border-style: solid;
+  }
+  #canvasStack {
+    display: flex;
   }
 </style>
