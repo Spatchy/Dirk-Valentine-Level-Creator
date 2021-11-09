@@ -12,6 +12,7 @@ const validChannels = [
   "GET_TILES",
   "CREATE_LEVEL",
   "INSERT_TILE",
+  "SAVE_LEVEL",
 ];
 
 contextBridge.exposeInMainWorld(
