@@ -2,6 +2,7 @@ import fs from "fs"
 import { xml2json, js2xml } from "xml-js";
 import settingManager from "./settingsManager"
 
+const projectPath = settingManager.appdata + "/projects"
 
 
 export default {
@@ -10,36 +11,46 @@ export default {
     const meta = levelData.getLevelMeta()
     const signMessages = levelData.getSignMessages()
 
-    let jsonToConvert = {
+    const jsonToConvert = {
       root: {
         level: {
           _attributes: {
             outside: meta["outside"],
             start_y: meta["start_y"],
             start_x: meta["start_x"],
-            width: meta["width"],
             height: meta["height"],
+            width: meta["width"],
+          }
+        },
+        tiles: [],
+        sign: [],
+        msg: { // no idea what this is for but it's in the original XML so I put it here too
+          _attributes: {
+            text: ""
           }
         }
       }
     }
     let i = 0
     layers.forEach(layer => {
-      const flattenedLayer = layer.flat(Infinity)
-      jsonToConvert.root["tiles"]["_attributes"] = {
-        id: i,
-        values: flattenedLayer
-      }
+      jsonToConvert.root.tiles.push({
+        _attributes: {
+          id: i,
+          values: layer.flat(Infinity)
+        }
+      })
       i++
     });
     signMessages.forEach(sign => {
-      jsonToConvert.root["sign"]["_attributes"] = {
-        layer: sign.layer,
-        n: sign.n,
-        text: sign.text,
-      }
+      jsonToConvert.root.sign.push({
+        _attributes: {
+          layer: sign.layer,
+          n: sign.n,
+          text: sign.text,
+        }
+      })
     })
 
-    console.log(js2xml(jsonToConvert, {compact:true}))
+    fs.writeFileSync(projectPath + "/test.xml", js2xml(jsonToConvert, {compact:true}))
   }
 }
