@@ -7,7 +7,11 @@ class levelData {
     this.outside = outside
     this.layers = []
     this.signMessages = []
-    this.addLayer()
+
+    for(let i = 0; i < 3; i++) { // insert 3 layers (minimum 3 needed for level to start)
+      this.addLayer()
+    }
+    
   }
   make2dArray(width, height) {
     const arr = []
