@@ -2,8 +2,9 @@
   <canvas-toolbar
     :initialisedIsOutside="initialisedIsOutside"
     @changeBackground="changeBackground($event)"
-    :numberOfLayers="numberOfLayers"
+    :initialNumberOfLayers="numberOfLayers"
     @changeLayerSelection="changeLayerSelection($event)"
+    @addLayer="addLayer()"
   />
   <div ref="canvasStack" id="canvasStack">
     <canvas ref="backgroundCanvas" :height="canvasHeight" :width="canvasWidth" style="z-index: -1"></canvas>
@@ -100,6 +101,7 @@ export default {
 
     addLayer() {
       this.numberOfLayers++
+      window.ipc.send("ADD_LAYER", "")
     },
 
     changeBackground(isOutside) {
