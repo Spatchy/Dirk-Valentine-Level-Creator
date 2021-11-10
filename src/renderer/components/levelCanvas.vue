@@ -2,6 +2,8 @@
   <canvas-toolbar
     :initialisedIsOutside="initialisedIsOutside"
     @changeBackground="changeBackground($event)"
+    :numberOfLayers="numberOfLayers"
+    @changeLayerSelection="changeLayerSelection($event)"
   />
   <div ref="canvasStack" id="canvasStack">
     <canvas ref="backgroundCanvas" :height="canvasHeight" :width="canvasWidth" style="z-index: -1"></canvas>
@@ -22,6 +24,7 @@ export default {
       numberOfLayers: 3,
       initialisedIsOutside: false,
       backgroundImageData: null,
+      selectedLayer: 0,
     }
   },
   props: {
@@ -69,11 +72,11 @@ export default {
     },
 
     placeTile(tile, x, y) { // change this to reflect layering system
-      const ctx = this.$refs.levelCanvas.getContext("2d")
+      const ctx = this.$refs[`canvasLayer${this.selectedLayer}`].getContext("2d")
       const imageElem = new Image()
       imageElem.src = tile.tileImage
       ctx.drawImage(imageElem, x, y)
-      window.ipc.send("INSERT_TILE", [tile.number, x/64, y/64])
+      window.ipc.send("INSERT_TILE", [tile.number, x/64, y/64, this.selectedLayer])
     },
 
     addLayer() {
@@ -109,6 +112,11 @@ export default {
       });
       
     },
+
+    changeLayerSelection(newlayer) {
+      console.log("changed Layer to " + newlayer)
+      this.selectedLayer = newlayer
+    }
   }
 }
 </script>
