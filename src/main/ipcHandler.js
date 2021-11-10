@@ -6,6 +6,7 @@ import ptyHandler from "./ptyHandler";
 import tileHandler from "./tileHandler";
 import projectHandler from "./projectHandler";
 import xmlHandler from "./xmlHandler";
+import miscAssetHandler from "./miscAssetHandler";
 
 export default {
 
@@ -65,6 +66,10 @@ export default {
 
   saveLevel: ipcMain.on("SAVE_LEVEL", (event, payload) => {
     xmlHandler.saveLevelData(projectHandler.getActiveLevel())
+  }),
+
+  getBackGroundImageData: ipcMain.on("GET_BACKGROUND_IMAGE_DATA", (event, payload) => {
+    event.reply("GET_BACKGROUND_IMAGE_DATA", miscAssetHandler.returnBackgroundImages())
   }),
 
   test: ipcMain.on("TEST", (event, payload) => {
