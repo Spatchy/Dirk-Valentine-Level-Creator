@@ -35,8 +35,8 @@ class levelData {
     }
     this.signMessages.push(sign)
   }
-  insertTile(tileId, x, y, layer = 0) {
-    console.log("id: " + tileId + " x: " + x + " y: " + y)
+  insertTile(tileId, x, y, layer) {
+    console.log("id:" + tileId + " x:" + x + " y:" + y + " Layer: " + layer)
     this.layers[layer][y][x] = tileId
   }
   toggleInsideOutside() {
