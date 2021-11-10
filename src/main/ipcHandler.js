@@ -60,8 +60,7 @@ export default {
   }),
 
   insertTile: ipcMain.on("INSERT_TILE", (event, payload) => {
-    projectHandler.getActiveLevel().insertTile(payload[0], payload[1], payload[2]) // add layers to this when implemented
-    event.reply("INSERT_TILE", projectHandler.getActiveLevel())
+    projectHandler.getActiveLevel().insertTile(payload[0], payload[1], payload[2], payload[3])
   }),
 
   saveLevel: ipcMain.on("SAVE_LEVEL", (event, payload) => {
