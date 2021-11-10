@@ -20,17 +20,17 @@ function pathToBase64(path) {
 
 
 function pathArrToBase64(pathArr) {
-  b64Arr = [];
+  const b64Arr = [];
   pathArr.forEach(path => {
     b64Arr.push(pathToBase64(mkPath(path)))
   });
-  return b64Arr;
+  return b64Arr
 }
 
 export default {
   mkPath, pathToBase64, pathArrToBase64,
 
   returnBackgroundImages() {
-
+    return pathArrToBase64(["1562.png", "258.png", "1604.png"])
   }
 }
