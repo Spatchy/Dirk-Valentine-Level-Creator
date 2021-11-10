@@ -100,7 +100,7 @@ export default {
         imageElem.addEventListener("load", () => {
           console.log("load successful")
           const pattern = ctx.createPattern(imageElem, "repeat")
-          ctx.fillstyle = pattern
+          ctx.fillStyle = pattern
           ctx.fillRect(0, 0, bgCanvas.width, bgCanvas.height)
         })
         imageElem.addEventListener("error", (e) => {
@@ -118,8 +118,11 @@ export default {
     border-width: 1px;
     border-color: black;
     border-style: solid;
+    position: absolute;
+    top: 0px;
+    left: 0px;
   }
-  #canvasStack {
-    display: flex;
+#canvasStack {
+    position: relative;
   }
 </style>
