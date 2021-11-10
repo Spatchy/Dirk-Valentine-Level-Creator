@@ -25,6 +25,7 @@ export default {
       initialisedIsOutside: false,
       backgroundImageData: null,
       selectedLayer: 0,
+      abnormalTileIndex: {},
     }
   },
   props: {
@@ -56,7 +57,11 @@ export default {
       const y = xy[1]
       const tileX = this.translatePosition(x)
       const tileY = this.translatePosition(y)
+      this.clearTile(tileX, tileY)
       this.placeTile(this.tileSet[this.selectedTile], tileX, tileY)
+      if(this.tileSet[this.selectedTile].height > 1 || this.tileSet[this.selectedTile].width > 1) {
+        this.abnormalTileIndex[`${this.selectedLayer}:${tileX}x${tileY}`] = [this.tileSet[this.selectedTile].width, this.tileSet[this.selectedTile].height]
+      }
     },
 
     getCursorPosition(event) {
@@ -77,6 +82,20 @@ export default {
       imageElem.src = tile.tileImage
       ctx.drawImage(imageElem, x, y)
       window.ipc.send("INSERT_TILE", [tile.number, x/64, y/64, this.selectedLayer])
+    },
+
+    clearTile(x, y) {
+      const ctx = this.$refs[`canvasLayer${this.selectedLayer}`].getContext("2d")
+      let widthMultiplier = 1
+      let heightMultiplier = 1
+      const selector = `${this.selectedLayer}:${x}x${y}`
+      if(selector in this.abnormalTileIndex) {
+        const abnormalValues = this.abnormalTileIndex[selector]
+        widthMultiplier = abnormalValues[0]
+        heightMultiplier = abnormalValues[1]
+        delete this.abnormalTileIndex[selector]
+      }
+      ctx.clearRect(x, y, 64*widthMultiplier, 64*heightMultiplier)
     },
 
     addLayer() {
