@@ -63,6 +63,10 @@ export default {
     projectHandler.getActiveLevel().insertTile(payload[0], payload[1], payload[2], payload[3])
   }),
 
+  addLayer: ipcMain.on("ADD_LAYER", (event, payload) => {
+    projectHandler.getActiveLevel().addLayer()
+  }),
+
   saveLevel: ipcMain.on("SAVE_LEVEL", (event, payload) => {
     xmlHandler.saveLevelData(projectHandler.getActiveLevel())
   }),

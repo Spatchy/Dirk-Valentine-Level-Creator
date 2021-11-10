@@ -14,6 +14,7 @@ const validChannels = [
   "INSERT_TILE",
   "SAVE_LEVEL",
   "GET_BACKGROUND_IMAGE_DATA",
+  "ADD_LAYER"
 ];
 
 contextBridge.exposeInMainWorld(
