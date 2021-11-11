@@ -130,5 +130,6 @@ export default {
     const signs = dataObject.sign.map(x => {x["_attributes"]})
     activeLevel = new levelData(meta["width"], meta["height"], meta["start_x"], meta["start_y"], meta["outside"])
     activeLevel.addLayers(layers)
+    activeLevel.addSignMessageArray(signs)
   }
 }
