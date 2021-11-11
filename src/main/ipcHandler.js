@@ -75,6 +75,11 @@ export default {
     event.reply("GET_BACKGROUND_IMAGE_DATA", miscAssetHandler.returnBackgroundImages())
   }),
 
+  openLevelData: ipcMain.on("OPEN_LEVEL_DATA", (event, payload) => {
+    const path = payload
+    projectHandler.importLevelData(xmlHandler.openLevelData(path))
+  }),
+
   test: ipcMain.on("TEST", (event, payload) => {
     console.log("test IPC triggered");
     ptyHandler.useSwfextract();
