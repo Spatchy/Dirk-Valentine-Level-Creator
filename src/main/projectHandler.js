@@ -27,6 +27,16 @@ class levelData {
   addLayer() {
     this.layers.push(this.make2dArray(this.width, this.height))
   }
+  addLayers(layers) {
+    layers.forEach(valuesString => {
+      valuesArray = valuesString.split(",")
+      const newLayer = []
+      for (i = 0,j = valuesArray.length; i < j; i += this.width) {
+          newLayer.push(valuesArray.slice(i, i + this.width))
+      }
+      this.layers.push(newLayer)
+    })
+  }
   addSignMessage(layer, n, text) {
     const sign = {
       "layer": layer,
@@ -34,6 +44,9 @@ class levelData {
       "text": text,
     }
     this.signMessages.push(sign)
+  }
+  addSignMessageArray(signs){
+    this.signMessages = this.signMessages.concat(signs)
   }
   insertTile(tileId, x, y, layer) {
     console.log("id:" + tileId + " x:" + x + " y:" + y + " Layer: " + layer)
@@ -109,5 +122,13 @@ export default {
   createLevel(width, height) {
     console.log("CREATING LEVEL")
     activeLevel = new levelData(width, height)
+  },
+
+  importLevelData(dataObject) {
+    const meta = dataObject.level["_attributes"]
+    const layers = dataObject.tiles.map(x => {x["_attributes"]["values"]})
+    const signs = dataObject.sign.map(x => {x["_attributes"]})
+    activeLevel = new levelData(meta["width"], meta["height"], meta["start_x"], meta["start_y"], meta["outside"])
+    activeLevel.addLayers(layers)
   }
 }
