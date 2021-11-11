@@ -1,17 +1,18 @@
 class levelData {
-  constructor(width, height, startX = 0, startY = 0, outside = false) {
-    this.width = width
-    this.height = height
-    this.startX = startX
-    this.startY = startY
-    this.outside = outside
+  constructor(width, height, startX = 0, startY = 0, outside = false, fromData = false) {
+    this.width = parseInt(width)
+    this.height = parseInt(height)
+    this.startX = parseInt(startX)
+    this.startY = parseInt(startY)
+    this.outside = typeof outside === String ? {"true":true, "false":false}[outside] : outside
     this.layers = []
     this.signMessages = []
 
-    for(let i = 0; i < 3; i++) { // insert 3 layers (minimum 3 needed for level to start)
-      this.addLayer()
-    }
-    
+    if(!fromData){
+      for(let i = 0; i < 3; i++) { // insert 3 layers (minimum 3 needed for level to start)
+        this.addLayer()
+      }
+    }    
   }
   make2dArray(width, height) {
     const arr = []
@@ -29,10 +30,10 @@ class levelData {
   }
   addLayers(layers) {
     layers.forEach(valuesString => {
-      valuesArray = valuesString.split(",")
+      const valuesArray = valuesString.split(",").map(x => parseInt(x))
       const newLayer = []
-      for (i = 0,j = valuesArray.length; i < j; i += this.width) {
-          newLayer.push(valuesArray.slice(i, i + this.width))
+      for (let i = 0; i < valuesArray.length; i += this.width) {
+        newLayer.push(valuesArray.slice(i, i + this.width))
       }
       this.layers.push(newLayer)
     })
@@ -125,10 +126,10 @@ export default {
   },
 
   importLevelData(dataObject) {
-    const meta = dataObject.level["_attributes"]
-    const layers = dataObject.tiles.map(x => {x["_attributes"]["values"]})
-    const signs = dataObject.sign.map(x => {x["_attributes"]})
-    activeLevel = new levelData(meta["width"], meta["height"], meta["start_x"], meta["start_y"], meta["outside"])
+    const meta = dataObject.root.level["_attributes"]
+    const layers = dataObject.root.tiles.map(x => x["_attributes"]["values"])
+    const signs = dataObject.root.sign.map(x => x["_attributes"]).map(x => { return {"layer":parseInt(x["layer"]), "n":parseInt(x["n"]), "text":x["text"]} })
+    activeLevel = new levelData(meta["width"], meta["height"], meta["start_x"], meta["start_y"], meta["outside"], true)
     activeLevel.addLayers(layers)
     activeLevel.addSignMessageArray(signs)
   }
