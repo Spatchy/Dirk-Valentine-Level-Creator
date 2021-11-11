@@ -1,5 +1,5 @@
 import fs from "fs"
-import { xml2json, js2xml } from "xml-js";
+import { xml2js, js2xml } from "xml-js";
 import settingManager from "./settingsManager"
 
 const projectPath = settingManager.appdata + "/projects"
@@ -52,5 +52,10 @@ export default {
     })
 
     fs.writeFileSync(projectPath + "/test.xml", js2xml(jsonToConvert, {compact:true}))
+  },
+
+  openLevelData(path) {
+    const xml = fs.readFileSync(path)
+    return xml2js(xml, {compact: true})
   }
 }
