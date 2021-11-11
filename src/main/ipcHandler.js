@@ -78,6 +78,7 @@ export default {
   openLevelData: ipcMain.on("OPEN_LEVEL_DATA", (event, payload) => {
     const path = payload
     projectHandler.importLevelData(xmlHandler.openLevelData(path))
+    event.reply("OPEN_LEVEL_DATA", projectHandler.getActiveLevel().getLevelLayers())
   }),
 
   test: ipcMain.on("TEST", (event, payload) => {
