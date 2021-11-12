@@ -34,7 +34,7 @@ export default {
 
     window.ipc.on("GET_TILES", response => {
       this.tileset.push(response);
-      if(this.tileset.length == 52){
+      if(this.tileset.length === 353){
         window.mergeImages.merge([this.tileset[19].tileImage, this.tileset[40].tileImage], (b64) => {
           this.mergeTest = b64;
         });
