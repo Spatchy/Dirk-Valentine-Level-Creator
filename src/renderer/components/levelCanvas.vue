@@ -32,7 +32,7 @@ export default {
   props: {
     tilesWidth: Number,
     tilesHeight: Number,
-    tileSet: Object,
+    tileSet: Array,
     selectedTile: Number,
   },
   computed: {
@@ -50,6 +50,10 @@ export default {
       this.backgroundImageData = response
       this.paintBackgroundCanvas(this.initialisedIsOutside)
     })
+
+    window.ipc.on("OPEN_LEVEL_DATA", response => {
+      this.paintCanvasLayers(response)
+    })
   },
   methods: {
     canvasAction(event) {
@@ -59,9 +63,11 @@ export default {
       const tileX = this.translatePosition(x)
       const tileY = this.translatePosition(y)
       this.clearTile(tileX, tileY)
-      this.placeTile(this.tileSet[this.selectedTile], tileX, tileY)
-      if(this.tileSet[this.selectedTile].height > 1 || this.tileSet[this.selectedTile].width > 1) {
-        this.abnormalTileIndex[`${this.selectedLayer}:${tileX}x${tileY}`] = [this.tileSet[this.selectedTile].width, this.tileSet[this.selectedTile].height]
+      const tile = this.tileSet[this.selectedTile]
+      this.paintTile(tile, tileX, tileY)
+      window.ipc.send("INSERT_TILE", [tile.number, tileX/64, tileY/64, this.selectedLayer])
+      if(tile.height > 1 || tile.width > 1) {
+        this.abnormalTileIndex[`${this.selectedLayer}:${tileX}x${tileY}`] = [tile.width, tile.height]
       }
     },
 
@@ -77,12 +83,11 @@ export default {
       return Math.floor(pos/64)*64
     },
 
-    placeTile(tile, x, y) { // change this to reflect layering system
-      const ctx = this.$refs[`canvasLayer${this.selectedLayer}`].getContext("2d")
+    paintTile(tile, x, y, layerId = this.selectedLayer) {
+      const ctx = this.$refs[`canvasLayer${layerId}`].getContext("2d")
       const imageElem = new Image()
       imageElem.src = tile.tileImage
       ctx.drawImage(imageElem, x, y)
-      window.ipc.send("INSERT_TILE", [tile.number, x/64, y/64, this.selectedLayer])
     },
 
     clearTile(x, y) {
@@ -102,6 +107,22 @@ export default {
     addLayer() {
       this.numberOfLayers++
       window.ipc.send("ADD_LAYER", "")
+    },
+
+    paintCanvasLayers(layers) {
+      console.log(JSON.stringify(this.tileSet))
+      console.log(this.tileSet[0])
+      layers.forEach((layer, z) => {
+        layer.forEach((row, y) => {
+          row.forEach((tile, x) => {
+            if(typeof this.tileSet[tile] == 'undefined') { // tile not in tileSet
+              //console.log(`tile ID ${tile} not yet in tileset - skipping`)
+            } else {
+              this.paintTile(this.tileSet[tile], x*64, y*64, z)
+            }
+          })
+        })
+      })
     },
 
     changeBackground(isOutside) {
