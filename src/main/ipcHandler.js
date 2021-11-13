@@ -81,6 +81,22 @@ export default {
     event.reply("OPEN_LEVEL_DATA", projectHandler.getActiveLevel().getLevelLayers())
   }),
 
+  getProjects: ipcMain.on("GET_PROJECTS", (event, payload) => {
+    const projectsList = projectHandler.returnProjectsList()
+    event.reply("GET_PROJECTS", projectsList)
+  }),
+
+  getLevelDimensions: ipcMain.on("GET_LEVEL_DIMENSIONS", (event, payload) => {
+    const project = payload[0]
+    const levelNum = payload[1]
+    const workingDir = settingsManager.appdata + "/projects/working/" + project + "/" + settingsManager.xmlNamesMap[levelNum-1]
+    console.log(workingDir)
+    const rawObj = xmlHandler.openLevelData(workingDir)
+    const meta = rawObj["root"]["level"]["_attributes"]
+    console.log(meta)
+    event.reply("GET_LEVEL_DIMENSIONS", [meta["width"], meta["height"], workingDir, project, levelNum])
+  }),
+
   test: ipcMain.on("TEST", (event, payload) => {
     console.log("test IPC triggered");
     ptyHandler.useSwfextract();

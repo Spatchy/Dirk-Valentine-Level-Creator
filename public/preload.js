@@ -16,6 +16,8 @@ const validChannels = [
   "GET_BACKGROUND_IMAGE_DATA",
   "ADD_LAYER",
   "OPEN_LEVEL_DATA",
+  "GET_PROJECTS",
+  "GET_LEVEL_DIMENSIONS"
 ];
 
 contextBridge.exposeInMainWorld(
@@ -23,12 +25,16 @@ contextBridge.exposeInMainWorld(
     send: (channel, data) => {
       if (validChannels.includes(channel)) {
         ipcRenderer.send(channel, data);
+      } else {
+        console.log(`Channel ${channel} is not in valid channels list`)
       }
     },
     on: (channel, func) => {
       if (validChannels.includes(channel)) {
         // Strip event as it includes `sender` and is a security risk
         ipcRenderer.on(channel, (event, ...args) => func(...args));
+      } else {
+        console.log(`Channel ${channel} is not in valid channels list`)
       }
     },
   }

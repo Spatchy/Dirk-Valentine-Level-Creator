@@ -52,6 +52,7 @@ export default {
     })
 
     window.ipc.on("OPEN_LEVEL_DATA", response => {
+      this.numberOfLayers = response.length
       this.paintCanvasLayers(response)
     })
   },

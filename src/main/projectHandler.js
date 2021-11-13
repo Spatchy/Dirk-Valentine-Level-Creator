@@ -1,3 +1,8 @@
+import fs from "fs"
+import settingsManager from "./settingsManager"
+
+const workingProjectsDir = settingsManager.appdata + "/projects/working"
+
 class levelData {
   constructor(width, height, startX = 0, startY = 0, outside = false, fromData = false) {
     this.width = parseInt(width)
@@ -132,5 +137,16 @@ export default {
     activeLevel = new levelData(meta["width"], meta["height"], meta["start_x"], meta["start_y"], meta["outside"], true)
     activeLevel.addLayers(layers)
     activeLevel.addSignMessageArray(signs)
-  }
+  },
+
+  returnProjectsList() {
+    if (!fs.existsSync(workingProjectsDir)) {
+      fs.mkdirSync(workingProjectsDir);
+    }
+
+    return fs.readdirSync(workingProjectsDir, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name)
+      .map(projname => { return [projname, fs.readdirSync(workingProjectsDir + "/" + projname).length] })
+  },
 }

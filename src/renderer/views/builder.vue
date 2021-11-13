@@ -2,6 +2,8 @@
   <div>
     <div>{{tileset.length}}</div>
     <img :src="mergeTest" alt="">
+    <h1>{{newProjectName}}</h1>
+    <h6>level {{newLevelNum}}</h6>
     <tile-menu :tileSet="tileset" :selectedTile="selectedTile" @selectTile="changeSelectedTile($event)"> </tile-menu>
     <level-canvas :tilesWidth="newLevelWidth" :tilesHeight="newLevelHeight" :selectedTile="selectedTile" :tileSet="tileset"></level-canvas>
   </div>
@@ -24,6 +26,9 @@ export default {
   props: {
     newLevelWidth: Number,
     newLevelHeight: Number,
+    newDir: String,
+    newProjectName: String,
+    newLevelNum: Number,
   },
   components: {
     tileMenu,
@@ -31,6 +36,8 @@ export default {
   },
   mounted() {
     window.ipc.send("GET_TILES", "")
+    console.log(this.newLevelWidth)
+    console.log(this.newLevelHeight)
 
     window.ipc.on("GET_TILES", response => {
       this.tileset.push(response);
@@ -38,6 +45,7 @@ export default {
         window.mergeImages.merge([this.tileset[19].tileImage, this.tileset[40].tileImage], (b64) => {
           this.mergeTest = b64;
         });
+        window.ipc.send("OPEN_LEVEL_DATA", this.newDir)
       }
     })
   },

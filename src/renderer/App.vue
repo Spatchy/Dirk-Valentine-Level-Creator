@@ -2,8 +2,8 @@
 <div>
   <div v-if="isValidSettings === null">Checking settings</div>
   <Init v-else-if="!isValidSettings" />
-  <Project-menu v-else-if="isValidSettings && !projectLoaded" @createNew="toggleLoadedProject($event)"/>
-  <Builder v-else :newLevelHeight="newLevelHeight" :newLevelWidth="newLevelWidth"/>
+  <Project-menu v-else-if="isValidSettings && !projectLoaded" @createNew="toggleLoadedProject($event)" @openExisting="openExistingLevel($event)"/>
+  <Builder v-else :newLevelHeight="newLevelHeight" :newLevelWidth="newLevelWidth" :newDir="newDir" :newProjectName="newProjectName" :newLevelNum="newLevelNum"/>
 </div>
 </template>
 
@@ -25,6 +25,9 @@ export default {
       projectLoaded: false,
       newLevelWidth: null,
       newLevelHeight: null,
+      newDir: null,
+      newProjectName: null,
+      newLevelNum: null,
     }
   },
   mounted() {
@@ -39,6 +42,13 @@ export default {
       });
       this.isValidSettings = tempValid;
     })
+
+    window.ipc.on("GET_LEVEL_DIMENSIONS", response => {
+      this.newDir = response[2]
+      this.newProjectName = response[3]
+      this.newLevelNum = response[4]
+      this.toggleLoadedProject([response[0], response[1]])
+    })
   },
   methods: {
     toggleLoadedProject(dimensions) {
@@ -47,6 +57,10 @@ export default {
         this.newLevelHeight = parseInt(dimensions[1])
       }
       this.projectLoaded = !this.projectLoaded
+    },
+
+    openExistingLevel(details) {
+      window.ipc.send("GET_LEVEL_DIMENSIONS", details)
     }
   }
 }
