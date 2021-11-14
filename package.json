@@ -13,6 +13,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "bulma": "^0.9.3",
     "core-js": "^3.6.5",
     "merge-images-v2": "^2.0.1",
     "node-pty": "^0.10.1",
