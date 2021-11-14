@@ -1,11 +1,11 @@
 <template>
-  <canvas-toolbar
-    :initialisedIsOutside="initialisedIsOutside"
-    @changeBackground="changeBackground($event)"
-    :initialNumberOfLayers="numberOfLayers"
-    @changeLayerSelection="changeLayerSelection($event)"
-    @addLayer="addLayer()"
-  />
+    <canvas-toolbar
+      :initialisedIsOutside="initialisedIsOutside"
+      @changeBackground="changeBackground($event)"
+      :initialNumberOfLayers="numberOfLayers"
+      @changeLayerSelection="changeLayerSelection($event)"
+      @addLayer="addLayer()"
+    />
   <div ref="canvasStack" id="canvasStack">
     <canvas ref="backgroundCanvas" :height="canvasHeight" :width="canvasWidth" style="z-index: -1"></canvas>
     <canvas v-for="(n, i) in numberOfLayers" :key="i" :ref="`canvasLayer${i}`" :height="canvasHeight" :width="canvasWidth" :style="`z-index: ${i}`"></canvas>
@@ -175,5 +175,7 @@ export default {
   }
 #canvasStack {
     position: relative;
+    overflow: scroll;
+    height: 70vh;
   }
 </style>

@@ -23,8 +23,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .tile-menu {
-    width: 33%;
+    height: 70vh;
+    overflow-y: scroll;
   }
 </style>
