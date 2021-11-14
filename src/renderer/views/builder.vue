@@ -1,11 +1,19 @@
 <template>
   <div>
-    <div>{{tileset.length}}</div>
-    <img :src="mergeTest" alt="">
-    <h1>{{newProjectName}}</h1>
-    <h6>level {{newLevelNum}}</h6>
-    <tile-menu :tileSet="tileset" :selectedTile="selectedTile" @selectTile="changeSelectedTile($event)"> </tile-menu>
-    <level-canvas :tilesWidth="newLevelWidth" :tilesHeight="newLevelHeight" :selectedTile="selectedTile" :tileSet="tileset"></level-canvas>
+    <div class="box">
+      <div>{{tileset.length}}</div>
+      <img :src="mergeTest" alt="">
+      <h1>{{newProjectName}}</h1>
+      <h6>level {{newLevelNum}}</h6>
+    </div>
+    <div class="columns">
+      <div class="column is-one-third">
+        <tile-menu :tileSet="tileset" :selectedTile="selectedTile" @selectTile="changeSelectedTile($event)"> </tile-menu>
+      </div>
+      <div class="column">
+        <level-canvas :tilesWidth="newLevelWidth" :tilesHeight="newLevelHeight" :selectedTile="selectedTile" :tileSet="tileset"></level-canvas>
+      </div>
+    </div>
   </div>
 </template>
 
