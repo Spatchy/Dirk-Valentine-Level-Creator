@@ -6,4 +6,11 @@ module.exports = {
       externals:['node-pty'],
     },
   },
+  css: {
+    loaderOptions: {
+      sass: {
+        additionalData: `@import "@/renderer/assets/globals.scss";`
+      }
+    }
+  }
 };
