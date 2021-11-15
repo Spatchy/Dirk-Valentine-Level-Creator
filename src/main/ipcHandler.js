@@ -97,9 +97,22 @@ export default {
     event.reply("GET_LEVEL_DIMENSIONS", [meta["width"], meta["height"], workingDir, project, levelNum])
   }),
 
-  test: ipcMain.on("TEST", (event, payload) => {
-    console.log("test IPC triggered");
-    ptyHandler.useSwfextract();
-  })
+  getSignData: ipcMain.on("GET_SIGN_DATA", (event, payload) => {
+    const n = payload[0]
+    const layer = payload[1]
+
+    const responseArr = [n, layer]
+
+    projectHandler.getActiveLevel().getSignMessages().forEach(msg => {
+      if(msg.layer == layer && msg.n == n) {
+        responseArr.push(msg.text)
+      }
+    })
+    if(responseArr.length < 3) {
+      responseArr.push(null)
+    }
+
+    event.reply("GET_SIGN_DATA", responseArr)
+  }),
 
 }
