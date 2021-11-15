@@ -30,6 +30,7 @@
           :tilesHeight="newLevelHeight"
           :selectedTile="selectedTile"
           :tileSet="tileset"
+          @saveLevel="saveLevel()"
         ></level-canvas>
       </div>
     </div>
@@ -81,6 +82,9 @@ export default {
     },
     goBack() {
       this.$emit("goBack")
+    },
+    saveLevel() {
+      window.ipc.send("SAVE_LEVEL", [this.newProjectName, this.newLevelNum])
     }
   },
 };
