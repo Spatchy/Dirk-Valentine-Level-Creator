@@ -11,6 +11,26 @@
     <canvas v-for="(n, i) in numberOfLayers" :key="i" :ref="`canvasLayer${i}`" :height="canvasHeight" :width="canvasWidth" :style="`z-index: ${i}`"></canvas>
     <canvas ref="selectionCanvas" :height="canvasHeight" :width="canvasWidth" @click="canvasAction($event)" style="z-index: 99999"></canvas>
   </div>
+
+  <div v-if="showSignModal" ref="signModal" class="modal is-active" style="z-index: 99999">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Edit Sign Data</p>
+          <button class="delete" aria-label="close" @click="getSignModalResult(false)"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>Tip: vertical bar | represents a line break</p>
+          <textarea class="modal-text-area" v-model="signToSave.text"></textarea>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="getSignModalResult(true)">Save changes</button>
+          <button class="button" @click="getSignModalResult(false)">Cancel</button>
+        </footer>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -27,6 +47,13 @@ export default {
       backgroundImageData: null,
       selectedLayer: 0,
       abnormalTileIndex: {},
+      showSignModal: false,
+      signToSave: {
+        n: null,
+        layer: null,
+        text: null,
+      },
+      callbackToExecute: null,
     }
   },
   props: {
@@ -44,16 +71,31 @@ export default {
     }
   },
   mounted() {
+    console.log("CANVAS MOUNTED")
     window.ipc.send("GET_BACKGROUND_IMAGE_DATA", "")
 
     window.ipc.on("GET_BACKGROUND_IMAGE_DATA", response => {
       this.backgroundImageData = response
-      this.paintBackgroundCanvas(this.initialisedIsOutside)
+      this.$nextTick(() => {
+        this.paintBackgroundCanvas(this.initialisedIsOutside)
+      })
     })
+
 
     window.ipc.on("OPEN_LEVEL_DATA", response => {
       this.numberOfLayers = response.length
-      this.paintCanvasLayers(response)
+      this.$nextTick(() => {
+        this.paintCanvasLayers(response)
+      })
+    })
+
+    window.ipc.on("GET_SIGN_DATA", response => {
+      this.signToSave.n = response[0]
+      this.signToSave.layer = response[1]
+      const text = response[2]
+
+      this.signToSave.text = text
+      this.showSignModal = true
     })
   },
   methods: {
@@ -63,13 +105,16 @@ export default {
       const y = xy[1]
       const tileX = this.translatePosition(x)
       const tileY = this.translatePosition(y)
-      this.clearTile(tileX, tileY)
       const tile = this.tileSet[this.selectedTile]
-      this.paintTile(tile, tileX, tileY)
-      window.ipc.send("INSERT_TILE", [tile.number, tileX/64, tileY/64, this.selectedLayer])
-      if(tile.height > 1 || tile.width > 1) {
-        this.abnormalTileIndex[`${this.selectedLayer}:${tileX}x${tileY}`] = [tile.width, tile.height]
-      }
+      this.doSpecialTileActions(tile, tileX/64, tileY/64, () => {
+        this.clearTile(tileX, tileY)
+        this.paintTile(tile, tileX, tileY)
+        window.ipc.send("INSERT_TILE", [tile.number, tileX/64, tileY/64, this.selectedLayer])
+        if(tile.height > 1 || tile.width > 1) {
+          this.abnormalTileIndex[`${this.selectedLayer}:${tileX}x${tileY}`] = [tile.width, tile.height]
+        }
+      })
+      
     },
 
     getCursorPosition(event) {
@@ -111,8 +156,6 @@ export default {
     },
 
     paintCanvasLayers(layers) {
-      console.log(JSON.stringify(this.tileSet))
-      console.log(this.tileSet[0])
       layers.forEach((layer, z) => {
         layer.forEach((row, y) => {
           row.forEach((tile, x) => {
@@ -139,6 +182,7 @@ export default {
         arrToUse.push(this.backgroundImageData[2])
       }
       const bgCanvas = this.$refs.backgroundCanvas
+      console.log("bg canvas: " + bgCanvas)
       const ctx = bgCanvas.getContext("2d")
       arrToUse.forEach(image => {
         const imageElem = new Image()
@@ -159,6 +203,30 @@ export default {
     changeLayerSelection(newlayer) {
       console.log("changed Layer to " + newlayer)
       this.selectedLayer = newlayer
+    },
+
+    doSpecialTileActions(tile, x, y, callback) {
+      if(tile.number === 1) { // is sign
+        this.placeSign(x, y, callback)
+      } else {
+        callback() // just carry on if no special actions required
+      }
+    },
+
+    placeSign(x, y, callback) {
+      const n = (this.tilesWidth * y) + x
+      this.callbackToExecute = callback
+      window.ipc.send("GET_SIGN_DATA", [n, this.selectedLayer])
+    },
+
+    getSignModalResult(result) {
+      if(result) {
+        const signdata = this.signToSave
+        window.ipc.send("ADD_SIGN_DATA", [signdata["layer"], signdata["n"], signdata["text"]])
+        this.callbackToExecute()
+      }
+      this.showSignModal = false
+      this.callbackToExecute = null
     }
   }
 }
@@ -173,9 +241,13 @@ export default {
     top: 0px;
     left: 0px;
   }
-#canvasStack {
+  #canvasStack {
     position: relative;
     overflow: scroll;
     height: 70vh;
+  }
+  .modal-text-area {
+    width: 30em;
+    height: 6em;
   }
 </style>
