@@ -1,10 +1,19 @@
 <template>
   <div>
-    <div class="box">
-      <button class="is-right"><span class="icon"><i class="fas fa-arrow-left"></i></span></button>
-      <div>{{ tileset.length }}</div>
-      <h1>{{ newProjectName }}</h1>
-      <h6>level {{ newLevelNum }}</h6>
+    <div class="notification is-info">
+      <div class="level is-mobile">
+        <div class="level-left">
+          <div class="level-item">
+            <button @click="goBack()"><span class="icon"><i class="fas fa-arrow-left"></i></span></button>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="title is-3 is-spaced">{{ newProjectName }}</p>
+            <p class="subtitle is-5">level {{ newLevelNum }}</p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="columns">
       <div class="column is-one-third">
@@ -47,6 +56,9 @@ export default {
     newProjectName: String,
     newLevelNum: Number,
   },
+  emits: [
+    "goBack"
+  ],
   components: {
     tileMenu,
     levelCanvas,
@@ -67,6 +79,9 @@ export default {
     changeSelectedTile(tileId) {
       this.selectedTile = tileId;
     },
+    goBack() {
+      this.$emit("goBack")
+    }
   },
 };
 </script>
