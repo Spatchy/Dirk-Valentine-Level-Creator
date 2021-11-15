@@ -44,12 +44,21 @@ class levelData {
     })
   }
   addSignMessage(layer, n, text) {
-    const sign = {
-      "layer": layer,
-      "n": n,
-      "text": text,
+    let isPresent = false
+    this.signMessages.forEach( (msg, i) => {
+      if(msg.layer == layer && msg.n == n) {
+        this.signMessages[i].text = text
+        isPresent = true;
+      }
+    })
+    if(!isPresent) {
+      const sign = {
+        "layer": layer,
+        "n": n,
+        "text": text,
+      }
+      this.signMessages.push(sign)
     }
-    this.signMessages.push(sign)
   }
   addSignMessageArray(signs){
     this.signMessages = this.signMessages.concat(signs)
