@@ -8,8 +8,8 @@
     <select :value="0" id="LayerSelect" @change="changeLayerSelection($event)">
       <option v-for="(n, i) in numberOfLayers" :key="i" :value="i">{{`Layer ${n}`}}</option>
     </select>
-    <button @click="addLayer()">+ New Layer</button>
-    <button @click="saveLevel()">save level</button>
+    <button @click="addLayer()" class="button is-small">+ New Layer</button>
+    <button @click="saveLevel()" class="button is-small">save level</button>
   </div>
 </template>
 
@@ -23,6 +23,7 @@ export default {
     "changeBackground",
     "changeLayerSelection",
     "addLayer",
+    "saveLevel"
   ],
   data() {
     return {
@@ -49,7 +50,7 @@ export default {
       this.numberOfLayers++
     },
     saveLevel() {
-      window.ipc.send("SAVE_LEVEL", "")
+      this.$emit("saveLevel")
     }
   }
 }

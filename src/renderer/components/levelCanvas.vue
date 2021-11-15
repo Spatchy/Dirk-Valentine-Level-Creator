@@ -5,6 +5,7 @@
       :initialNumberOfLayers="numberOfLayers"
       @changeLayerSelection="changeLayerSelection($event)"
       @addLayer="addLayer()"
+      @saveLevel="saveLevel()"
     />
   <div ref="canvasStack" id="canvasStack">
     <canvas ref="backgroundCanvas" :height="canvasHeight" :width="canvasWidth" style="z-index: -1"></canvas>
@@ -21,11 +22,12 @@
           <button class="delete" aria-label="close" @click="getSignModalResult(false)"></button>
         </header>
         <section class="modal-card-body">
-          <p>Tip: vertical bar | represents a line break</p>
+          <p>Tip: vertical bar | represents a line break. </p>
+          <p class="has-text-danger">If the text you were expecting did not show, you're probably on the wrong layer - signs are conventionally on layer 2</p>
           <textarea class="modal-text-area" v-model="signToSave.text"></textarea>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success" @click="getSignModalResult(true)">Save changes</button>
+          <button class="button is-success" @click="getSignModalResult(true)">Confirm</button>
           <button class="button" @click="getSignModalResult(false)">Cancel</button>
         </footer>
       </div>
@@ -62,6 +64,9 @@ export default {
     tileSet: Array,
     selectedTile: Number,
   },
+  emits: [
+    "saveLevel"
+  ],
   computed: {
     canvasWidth() {
       return this.tilesWidth * 64
@@ -227,6 +232,10 @@ export default {
       }
       this.showSignModal = false
       this.callbackToExecute = null
+    },
+
+    saveLevel() {
+      this.$emit("saveLevel")
     }
   }
 }
