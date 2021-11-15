@@ -19,6 +19,7 @@ const validChannels = [
   "GET_PROJECTS",
   "GET_LEVEL_DIMENSIONS",
   "GET_SIGN_DATA",
+  "ADD_SIGN_DATA"
 ];
 
 contextBridge.exposeInMainWorld(

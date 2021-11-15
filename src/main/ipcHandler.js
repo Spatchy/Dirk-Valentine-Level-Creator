@@ -115,4 +115,8 @@ export default {
     event.reply("GET_SIGN_DATA", responseArr)
   }),
 
+  addSignData: ipcMain.on("ADD_SIGN_DATA", (event, payload) => {
+    projectHandler.getActiveLevel().addSignMessage(payload[0], payload[1], payload[2])
+  })
+
 }
