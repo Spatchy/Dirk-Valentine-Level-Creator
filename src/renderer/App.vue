@@ -3,7 +3,7 @@
   <div v-if="isValidSettings === null">Checking settings</div>
   <Init v-else-if="!isValidSettings" />
   <Project-menu v-else-if="isValidSettings && !projectLoaded" @createNew="toggleLoadedProject($event)" @openExisting="openExistingLevel($event)"/>
-  <Builder v-else :newLevelHeight="newLevelHeight" :newLevelWidth="newLevelWidth" :newDir="newDir" :newProjectName="newProjectName" :newLevelNum="newLevelNum"/>
+  <Builder v-else :newLevelHeight="newLevelHeight" :newLevelWidth="newLevelWidth" :newDir="newDir" :newProjectName="newProjectName" :newLevelNum="newLevelNum" @goBack="resetView()"/>
 </div>
 </template>
 
@@ -61,7 +61,16 @@ export default {
 
     openExistingLevel(details) {
       window.ipc.send("GET_LEVEL_DIMENSIONS", details)
-    }
+    },
+
+    resetView() {
+      this.projectLoaded = false
+      this.newLevelWidth = null
+      this.newLevelHeight = null
+      this.newDir = null
+      this.newProjectName = null
+      this.newLevelNum = null
+    },
   }
 }
 </script>
@@ -72,7 +81,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 </style>
