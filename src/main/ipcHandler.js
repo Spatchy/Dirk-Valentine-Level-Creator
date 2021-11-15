@@ -68,7 +68,7 @@ export default {
   }),
 
   saveLevel: ipcMain.on("SAVE_LEVEL", (event, payload) => {
-    xmlHandler.saveLevelData(projectHandler.getActiveLevel())
+    xmlHandler.saveLevelData(projectHandler.getActiveLevel(), payload[0], payload[1])
   }),
 
   getBackGroundImageData: ipcMain.on("GET_BACKGROUND_IMAGE_DATA", (event, payload) => {

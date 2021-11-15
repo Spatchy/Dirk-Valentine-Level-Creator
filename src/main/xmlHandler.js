@@ -6,7 +6,7 @@ const projectPath = settingManager.appdata + "/projects"
 
 
 export default {
-  saveLevelData(levelData) {
+  saveLevelData(levelData, project, levelNum) {
     const layers = levelData.getLevelLayers()
     const meta = levelData.getLevelMeta()
     const signMessages = levelData.getSignMessages()
@@ -50,8 +50,8 @@ export default {
         }
       })
     })
-
-    fs.writeFileSync(projectPath + "/test.xml", js2xml(jsonToConvert, {compact:true}))
+    const savepath = projectPath + "/working/" + project + "/" + settingManager.xmlNamesMap[levelNum-1]
+    fs.writeFileSync(savepath, js2xml(jsonToConvert, {compact:true}))
   },
 
   openLevelData(path) {
