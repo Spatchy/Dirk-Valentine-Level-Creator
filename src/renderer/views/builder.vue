@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="box">
+      <button class="is-right"><span class="icon"><i class="fas fa-arrow-left"></i></span></button>
       <div>{{ tileset.length }}</div>
-      <img :src="mergeTest" alt="" />
       <h1>{{ newProjectName }}</h1>
       <h6>level {{ newLevelNum }}</h6>
     </div>
@@ -36,7 +36,6 @@ export default {
   data() {
     return {
       tileset: [],
-      mergeTest: null,
       selectedTile: 0,
       selectedLayer: 0,
     };
@@ -60,12 +59,6 @@ export default {
     window.ipc.on("GET_TILES", (response) => {
       this.tileset.push(response);
       if (this.tileset.length === 353) {
-        window.mergeImages.merge(
-          [this.tileset[19].tileImage, this.tileset[40].tileImage],
-          (b64) => {
-            this.mergeTest = b64;
-          }
-        );
         window.ipc.send("OPEN_LEVEL_DATA", this.newDir);
       }
     });
