@@ -1,4 +1,5 @@
 import miscAssetHandler from "./miscAssetHandler";
+import sharp from "sharp";
 
 class Tile {
   constructor(number, name, baseLayer, additionalLayers = [], width = 1, height = 1, rotate = 0, flipHorizontal = false, flipVertical = false) {
@@ -11,10 +12,59 @@ class Tile {
     this.rotate = rotate
     this.flipHorizontal = flipHorizontal
     this.flipVertical = flipVertical
+
+    const requiresProcessing = additionalLayers.length > 0 || rotate || flipHorizontal || flipVertical
+    if(requiresProcessing) {
+      this.doAdditionalProcessing(rotate, flipHorizontal,flipVertical)
+    }
   }
 
   setTileImage(b64){
     this.tileImage = b64;
+  }
+
+  doAdditionalProcessing(rotate, flipHorizontal, flipVertical) {
+    const rawb64 = this.tileImage.replace("data:image/png;base64, ", "") // strip b64 png header
+    const sharpInstance = sharp(Buffer.from(rawb64, "base64"))
+    
+    const compositeOptionsArr = []
+
+    if(this.additionalLayers.length > 0) {
+      this.additionalLayers.forEach(layer => {
+        const optionsObj = {}
+        if(this.name.startsWith("teleporter")) {
+          optionsObj["top"] = 13
+          optionsObj["left"] = 20
+        }
+        const rawLayer = layer.replace("data:image/png;base64, ", "")
+        optionsObj["input"] = Buffer.from(rawLayer, "base64")
+        compositeOptionsArr.push(optionsObj)
+      })
+    }
+    sharpInstance.composite(compositeOptionsArr)
+    .toBuffer((err, data, meta) => {  // composited images must be flattened to buffer before more operations
+      if(err) {
+        console.error(err)
+      } else {
+        const sharpInstance2 = sharp(data) // import buffer into new sharp instance
+        if(rotate) {
+          sharpInstance2.rotate(rotate)
+        }
+        if(flipHorizontal) {
+          sharpInstance2.flop()
+        }
+        if(flipVertical) {
+          sharpInstance2.flip()
+        }
+        sharpInstance2.toBuffer((err, data, meta) => {
+          if(err) {
+            console.error(err)
+          } else {
+            this.tileImage = "data:image/png;base64, " + data.toString("base64")
+          }
+        })
+      }
+    })
   }
 }
 
