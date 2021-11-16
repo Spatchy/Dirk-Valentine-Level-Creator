@@ -2,15 +2,24 @@
   <div class="columns is-centered">
     <div class="column is-half full-height">
       <div class="column-scrollable">
-        <div v-for="n in projectsList" :key="n[0]" :id="n[0]" :ref="`projectItem${n[0]}`" @click="toggleExpandProject($event, n[0])" class="notification">
-          <h4 class="is-size-4">{{n[0]}}</h4>
-
-          <div v-if="expand == n[0]">
-            <p v-for="i in n[1]" :key="`${n[0]}:${i}`" @click="openLevel(n[0], i)">{{`Level ${i}`}}</p>
-            <button @click="newLevel(n[0])" class="button is-small">+ Add level</button>
-          </div>
-
-        </div>
+        <nav class="panel">
+          <p class="panel-heading">Projects</p>
+          <a v-for="n in projectsList" :key="n[0]" :id="n[0]" :ref="`projectItem${n[0]}`" @click="toggleExpandProject($event, n[0])" class="panel-block">
+            <p v-if="!(expand == n[0])"><span class="panel-icon"><i class="fas fa-folder"></i></span>{{n[0]}}</p>
+            <aside v-if="expand == n[0]" class="menu">
+              <ul class="menu-list">
+                <a><span class="panel-icon"><i class="fas fa-folder"></i></span><b>{{n[0]}}</b></a>
+                <ul>
+                  <li v-for="i in n[1]" :key="`${n[0]}:${i}`" @click="openLevel(n[0], i)"><a class="level-option">{{`Level ${i}`}}</a></li>
+                  <li><button @click="newLevel(n[0])" class="button is-small">+ Add level</button></li>
+                </ul>
+              </ul>
+            </aside>
+          </a>
+          <a class="panel-block">
+            <button class="button is-fullwidth">New Project</button>
+          </a>
+        </nav>
       </div>
       <input type="text" v-model="newLevelWidth" placeholder="width">
       <input type="text" v-model="newLevelHeight" placeholder="height">
@@ -70,5 +79,9 @@ export default {
   .column-scollable {
     height: 400px;
     overflow: auto;
+  }
+
+  .level-option:hover {
+    text-decoration: underline;
   }
 </style>
