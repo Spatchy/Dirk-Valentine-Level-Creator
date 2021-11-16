@@ -41,11 +41,3 @@ contextBridge.exposeInMainWorld(
     },
   }
 );
-
-contextBridge.exposeInMainWorld(
-  'mergeImages', {
-    merge: (arr, callback) => {
-      mergeImages(arr).then(b64 => callback(b64));
-    }
-  }
-)
