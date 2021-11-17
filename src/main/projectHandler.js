@@ -136,7 +136,7 @@ export default {
 
   createLevel(width, height) {
     console.log("CREATING LEVEL")
-    activeLevel = new levelData(width, height)
+    return new levelData(width, height)
   },
 
   importLevelData(dataObject) {
