@@ -86,6 +86,10 @@ export default {
     event.reply("GET_PROJECTS", projectsList)
   }),
 
+  newProjectFolder: ipcMain.on("NEW_PROJECT_FOLDER", (event, payload) => {
+    projectHandler.createNewProject(payload)
+  }),
+
   getLevelDimensions: ipcMain.on("GET_LEVEL_DIMENSIONS", (event, payload) => {
     const project = payload[0]
     const levelNum = payload[1]
