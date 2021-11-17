@@ -40,7 +40,8 @@ export default {
         }
       })
       i++
-    });
+    })
+
     signMessages.forEach(sign => {
       jsonToConvert.root.sign.push({
         _attributes: {
@@ -50,6 +51,26 @@ export default {
         }
       })
     })
+
+    if(jsonToConvert.root.sign.length === 0) {  // add dummy signs so array is present when xml data is parsed 
+      jsonToConvert.root.sign.push({
+        _attributes: {
+          layer: 1,
+          n: 9999,
+          text: "dummy 1",
+        }
+      })
+    }
+    if(jsonToConvert.root.sign.length === 1) {
+      jsonToConvert.root.sign.push({
+        _attributes: {
+          layer: 1,
+          n: 9999,
+          text: "dummy 2",
+        }
+      })
+    }
+
     const savepath = projectPath + "/working/" + project + "/" + settingManager.xmlNamesMap[levelNum-1]
     fs.writeFileSync(savepath, js2xml(jsonToConvert, {compact:true}))
   },
