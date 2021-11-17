@@ -56,7 +56,11 @@ export default {
   }),
 
   createLevel: ipcMain.on("CREATE_LEVEL", (event, payload) => {
-    projectHandler.createLevel(payload[0], payload[1])
+    console.log(payload)
+    const levelData = projectHandler.createLevel(payload[2], payload[3])
+    console.log(projectHandler.returnProjectsList())
+    const levelNumber = projectHandler.returnProjectsList()[payload[1]][1] + 1
+    xmlHandler.saveLevelData(levelData, payload[0], levelNumber)
   }),
 
   insertTile: ipcMain.on("INSERT_TILE", (event, payload) => {
