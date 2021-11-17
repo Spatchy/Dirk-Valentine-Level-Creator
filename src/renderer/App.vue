@@ -2,7 +2,7 @@
 <div>
   <div v-if="isValidSettings === null">Checking settings</div>
   <Init v-else-if="!isValidSettings" />
-  <Project-menu v-else-if="isValidSettings && !projectLoaded" @createNew="toggleLoadedProject($event)" @openExisting="openExistingLevel($event)"/>
+  <Project-menu v-else-if="isValidSettings && !projectLoaded" @openExisting="openExistingLevel($event)"/>
   <Builder v-else :newLevelHeight="newLevelHeight" :newLevelWidth="newLevelWidth" :newDir="newDir" :newProjectName="newProjectName" :newLevelNum="newLevelNum" @goBack="resetView()"/>
 </div>
 </template>
