@@ -11,15 +11,34 @@
                 <a><span class="panel-icon"><i class="fas fa-folder"></i></span><b>{{n[0]}}</b></a>
                 <ul>
                   <li v-for="i in n[1]" :key="`${n[0]}:${i}`" @click="openLevel(n[0], i)"><a class="level-option">{{`Level ${i}`}}</a></li>
-                  <li><button @click="newLevel(n[0])" class="button is-small">+ Add level</button></li>
+                  <li v-if="n[1] < 24"><button @click="newLevel(n[0])" class="button is-small">+ Add level</button></li>
                 </ul>
               </ul>
             </aside>
           </a>
           <a class="panel-block">
-            <button class="button is-fullwidth">New Project</button>
+            <button class="button is-fullwidth" @click="showNewProjectModal = true">New Project</button>
           </a>
         </nav>
+      </div>
+      <div v-if="showNewProjectModal" ref="newProjectModal" class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Create Project</p>
+              <button class="delete" aria-label="close" @click="showNewProjectModal = false"></button>
+            </header>
+            <section class="modal-card-body">
+              <p>Choose a name for the new project</p>
+              <input type="text" class="modal-text-area" v-model="newProjectName" />
+            </section>
+            <footer class="modal-card-foot">
+              <button class="button is-success" @click="newProject()" :disabled="disableNewProjectButton">Create</button>
+              <button class="button" @click="showNewProjectModal = false">Cancel</button>
+            </footer>
+          </div>
+        </div>
       </div>
       <input type="text" v-model="newLevelWidth" placeholder="width">
       <input type="text" v-model="newLevelHeight" placeholder="height">
@@ -36,6 +55,11 @@ export default {
       newLevelHeight: null,
       projectsList: null,
       expand: null,
+      showNewProjectModal: false,
+      newProjectName: null,
+      showNewLevelModal: false,
+      newLevelName: null,
+      disableNewProjectButton: false,
     }
   },
   mounted() {
@@ -43,6 +67,7 @@ export default {
 
     window.ipc.on("GET_PROJECTS", response => {
       this.projectsList = response
+      console.log(this.projectsList)
     })
   },
   emits: [
@@ -53,6 +78,13 @@ export default {
     newLevel(project) {
       window.ipc.send("CREATE_LEVEL", [project, this.newLevelWidth, this.newLevelHeight])
       this.$emit("createNew", [project, this.newLevelWidth, this.newLevelHeight])
+    },
+
+    newProject() {
+      window.ipc.send("NEW_PROJECT_FOLDER", this.newProjectName)
+      this.projectsList.push([this.newProjectName, 0])
+      this.newProjectName = null
+      this.showNewProjectModal = false
     },
 
     openProject(event, projectName) {
@@ -69,6 +101,16 @@ export default {
         this.expand = null
       } else {
         this.expand = project
+      }
+    }
+  },
+  watch: {
+    newProjectName(contents) {
+      if(contents !== null) {
+        const checkArr = this.projectsList.map(x => x[0].toLowerCase())
+        if(checkArr.includes(contents.toLowerCase())) {
+          this.disableNewProjectButton = true
+          }
       }
     }
   }

@@ -158,4 +158,8 @@ export default {
       .map(dirent => dirent.name)
       .map(projname => { return [projname, fs.readdirSync(workingProjectsDir + "/" + projname).length] })
   },
+
+  createNewProject(name) {
+    fs.mkdirSync(workingProjectsDir + "/" + name)
+  }
 }
