@@ -26,8 +26,8 @@
       </div>
       <div class="column">
         <level-canvas
-          :tilesWidth="newLevelWidth"
-          :tilesHeight="newLevelHeight"
+          :initialWidth="newLevelWidth"
+          :initialHeight="newLevelHeight"
           :selectedTile="selectedTile"
           :tileSet="tileset"
           @saveLevel="saveLevel()"
@@ -65,9 +65,7 @@ export default {
     levelCanvas,
   },
   mounted() {
-    window.ipc.send("GET_TILES", "");
-    console.log(this.newLevelWidth);
-    console.log(this.newLevelHeight);
+    window.ipc.send("GET_TILES", "")
 
     window.ipc.on("GET_TILES", (response) => {
       this.tileset.push(response);
