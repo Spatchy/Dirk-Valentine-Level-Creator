@@ -175,7 +175,8 @@ export default {
     },
 
     changeBackground(isOutside) {
-      console.log(isOutside)
+      isOutside = typeof isOutside === "string" ? {"true": true, "false": false}[isOutside.toLowerCase()] : isOutside
+      window.ipc.send("CHANGE_BACKGROUND", "")
       this.paintBackgroundCanvas(isOutside)
     },
 
@@ -187,13 +188,11 @@ export default {
         arrToUse.push(this.backgroundImageData[2])
       }
       const bgCanvas = this.$refs.backgroundCanvas
-      console.log("bg canvas: " + bgCanvas)
       const ctx = bgCanvas.getContext("2d")
       arrToUse.forEach(image => {
         const imageElem = new Image()
         imageElem.src = image
         imageElem.addEventListener("load", () => {
-          console.log("load successful")
           const pattern = ctx.createPattern(imageElem, "repeat")
           ctx.fillStyle = pattern
           ctx.fillRect(0, 0, bgCanvas.width, bgCanvas.height)
@@ -206,7 +205,6 @@ export default {
     },
 
     changeLayerSelection(newlayer) {
-      console.log("changed Layer to " + newlayer)
       this.selectedLayer = newlayer
     },
 
