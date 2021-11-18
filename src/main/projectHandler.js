@@ -9,7 +9,7 @@ class levelData {
     this.height = parseInt(height)
     this.startX = parseInt(startX)
     this.startY = parseInt(startY)
-    this.outside = typeof outside === String ? {"true":true, "false":false}[outside] : outside
+    this.outside = typeof outside === "string" ? {"true":true, "false":false}[outside] : outside
     this.layers = []
     this.signMessages = []
 
