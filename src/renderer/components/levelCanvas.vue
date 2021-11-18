@@ -1,8 +1,12 @@
 <template>
     <canvas-toolbar
-      :initialisedIsOutside="initialisedIsOutside"
-      @changeBackground="changeBackground($event)"
+      :initialIsOutside="isOutside"
       :initialNumberOfLayers="numberOfLayers"
+      :initialWidth="tilesWidth"
+      :initialHeight="tilesHeight"
+      @changeWidth="changeWidth($event)"
+      @changeHeight="changeHeight($event)"
+      @changeBackground="changeBackground($event)"
       @changeLayerSelection="changeLayerSelection($event)"
       @addLayer="addLayer()"
       @saveLevel="saveLevel()"
@@ -42,10 +46,15 @@ export default {
   components: {
     canvasToolbar
   },
+  props: {
+    initialWidth: Number,
+    initialHeight: Number,
+    tileSet: Array,
+    selectedTile: Number,
+  },
   data() {
     return {
       numberOfLayers: 3,
-      initialisedIsOutside: false,
       backgroundImageData: null,
       selectedLayer: 0,
       abnormalTileIndex: {},
@@ -56,13 +65,10 @@ export default {
         text: null,
       },
       callbackToExecute: null,
+      tilesWidth: this.initialWidth,
+      tilesHeight: this.initialHeight,
+      isOutside: false,
     }
-  },
-  props: {
-    tilesWidth: Number,
-    tilesHeight: Number,
-    tileSet: Array,
-    selectedTile: Number,
   },
   emits: [
     "saveLevel"
@@ -81,16 +87,21 @@ export default {
 
     window.ipc.on("GET_BACKGROUND_IMAGE_DATA", response => {
       this.backgroundImageData = response
-      this.$nextTick(() => {
-        this.paintBackgroundCanvas(this.initialisedIsOutside)
-      })
     })
 
 
     window.ipc.on("OPEN_LEVEL_DATA", response => {
       this.numberOfLayers = response.length
+      window.ipc.send("GET_IS_OUTSIDE")
       this.$nextTick(() => {
         this.paintCanvasLayers(response)
+      })
+    })
+
+    window.ipc.on("GET_IS_OUTSIDE", response => {
+      this.isOutside = response
+      this.$nextTick(() => {
+        this.paintBackgroundCanvas(this.isOutside)
       })
     })
 
@@ -176,6 +187,7 @@ export default {
 
     changeBackground(isOutside) {
       isOutside = typeof isOutside === "string" ? {"true": true, "false": false}[isOutside.toLowerCase()] : isOutside
+      this.isOutside = isOutside
       window.ipc.send("CHANGE_BACKGROUND", "")
       this.paintBackgroundCanvas(isOutside)
     },
@@ -234,6 +246,42 @@ export default {
 
     saveLevel() {
       this.$emit("saveLevel")
+    },
+
+    saveCanvasData() {
+      const dataUrlArr = []
+      for(let i = 0; i < this.numberOfLayers; i++) {
+        dataUrlArr.push(this.$refs[`canvasLayer${i}`].toDataURL())
+      }
+      console.log(dataUrlArr)
+      return dataUrlArr
+    },
+
+    repaintCanvasesFromData(dataUlrArr) {
+      dataUlrArr.forEach((data, i) => {
+        const ctx = this.$refs[`canvasLayer${i}`].getContext("2d")
+        const imageElem = new Image()
+        imageElem.src = data
+        imageElem.addEventListener("load", () => {
+          ctx.drawImage(imageElem, 0, 0)
+        })
+      })
+    },
+
+    changeWidth(newTilesWidth) {
+      const canvasData = this.saveCanvasData()
+      this.tilesWidth = newTilesWidth
+      window.ipc.send("CHANGE_WIDTH", newTilesWidth)
+      this.paintBackgroundCanvas(this.isOutside)
+      this.repaintCanvasesFromData(canvasData)
+    },
+
+    changeHeight(newTilesHeight) {
+      const canvasData = this.saveCanvasData()
+      this.tilesHeight = newTilesHeight
+      window.ipc.send("CHANGE_HEIGHT", newTilesHeight)
+      this.paintBackgroundCanvas(this.isOutside)
+      this.repaintCanvasesFromData(canvasData)
     }
   }
 }
