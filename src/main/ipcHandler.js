@@ -83,6 +83,10 @@ export default {
     event.reply("GET_BACKGROUND_IMAGE_DATA", miscAssetHandler.returnBackgroundImages())
   }),
 
+  getIsOutside: ipcMain.on("GET_IS_OUTSIDE", (event, payload) => {
+    event.reply("GET_IS_OUTSIDE", projectHandler.getActiveLevel().outside)
+  }),
+
   openLevelData: ipcMain.on("OPEN_LEVEL_DATA", (event, payload) => {
     const path = payload
     projectHandler.importLevelData(xmlHandler.openLevelData(path))
@@ -109,10 +113,17 @@ export default {
     event.reply("GET_LEVEL_DIMENSIONS", [meta["width"], meta["height"], workingDir, project, levelNum])
   }),
 
+  changeWidth: ipcMain.on("CHANGE_WIDTH", (event, payload) => {
+    projectHandler.getActiveLevel().changeWidth(payload)
+  }),
+
+  changeHeight: ipcMain.on("CHANGE_HEIGHT", (event, payload) => {
+    projectHandler.getActiveLevel().changeHeight(payload)
+  }),
+
   getSignData: ipcMain.on("GET_SIGN_DATA", (event, payload) => {
     const n = payload[0]
     const layer = payload[1]
-
     const responseArr = [n, layer]
 
     projectHandler.getActiveLevel().getSignMessages().forEach(msg => {
