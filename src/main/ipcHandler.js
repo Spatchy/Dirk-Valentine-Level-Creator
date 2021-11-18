@@ -75,6 +75,10 @@ export default {
     xmlHandler.saveLevelData(projectHandler.getActiveLevel(), payload[0], payload[1])
   }),
 
+  changeBackground: ipcMain.on("CHANGE_BACKGROUND", (event, payload) => {
+    projectHandler.getActiveLevel().toggleInsideOutside()
+  }),
+
   getBackGroundImageData: ipcMain.on("GET_BACKGROUND_IMAGE_DATA", (event, payload) => {
     event.reply("GET_BACKGROUND_IMAGE_DATA", miscAssetHandler.returnBackgroundImages())
   }),
