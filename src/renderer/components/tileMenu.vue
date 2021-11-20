@@ -3,13 +3,13 @@
     Tools
     <div id="menu-tools"></div>
     Basic Tiles
-    <div id="menu-basic-tiles"></div>
+    <div id="menu-basic"></div>
     Multi-Tiles (mostly decorative)
-    <div id="menu-multi-tiles"></div>
+    <div id="menu-multi"></div>
     Decoration
     <div id="menu-decoration"></div>
     Moving Platforms
-    <div id="menu-moving-platforms"></div>
+    <div id="menu-moving"></div>
     Teleporters
     <div id="menu-teleporters"></div>
     Hazards
@@ -18,23 +18,10 @@
     <div id="menu-enemies"></div>
     Other
     <div id="menu-other"></div>
+    <div id="menu-undefined" v-show="false"></div> <!--unused tiles will be teleported here implicitly-->
     <teleport v-for="tile in tileSet" :key="tile.number" :to="returnGroupId(tile.number)">
-      <tile-display :tile="tile" :selectedTile="selectedTile" @selected="selectTile($event)" v-show="tile.name != 'UNUSED'" @load="tilesLoaded++"></tile-display>
+      <tile-display :tile="tile" :selectedTile="selectedTile" @selected="selectTile($event)" v-if="tile.name != 'UNUSED'"></tile-display>
     </teleport>
-  </div>
-  <div v-if="tilesLoaded < 352" ref="signModal" class="modal is-active" style="z-index: 999999">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Loading Tiles</p>
-          <button class="delete" aria-label="close" @click="getSignModalResult(false)"></button>
-        </header>
-        <section class="modal-card-body">
-          <p>Loaded {{tilesLoaded}} tiles of 352</p>
-        </section>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -56,6 +43,7 @@ export default {
     const s = this
     return {
       tools: [0, 1, 333],
+      basic: [...s.range(2, 29), ...s.range(45, 59), 61, ...s.range(73, 78), ...s.range(345, 352)],
       multi: [...s.range(30, 33), 62],
       decoration: [...s.range(34, 44), ...s.range(63, 68), ...s.range(275, 316)],
       moving: [...s.range(89, 124), ...s.range(245, 248)],
@@ -63,9 +51,27 @@ export default {
       hazards: [...s.range(249, 268)],
       enemies: [...s.range(269, 273), ...s.range(317, 323), ...s.range(325, 329), ...s.range(335, 343)],
       other: [324, ...s.range(330, 332), 334, 344],
-      // Basic is everything else, own arr not needed
-      tilesLoaded: 0
+      // everything else is unused, own arr not needed
+      tilesLoaded: 0,
+      lookupTable: {}
     }
+  },
+  created() {
+    const arrsToCheck = {
+      tools: this.tools,
+      basic: this.basic,
+      multi: this.multi,
+      decoration: this.decoration,
+      moving: this.moving, 
+      hazards: this.hazards, 
+      enemies: this.enemies,
+      other: this.other
+    }
+    Object.keys(arrsToCheck).forEach(arrName => {
+      arrsToCheck[arrName].forEach(tile => {
+        this.lookupTable[tile] = arrName
+      })
+    })
   },
   methods: {
     selectTile(tileId) {
@@ -73,7 +79,8 @@ export default {
     },
 
     returnGroupId(index) {
-      if(this.tools.includes(index)) {
+      return `#menu-${this.lookupTable[index]}`
+      /* if(this.tools.includes(index)) {
         return "#menu-tools"
       } else if (this.multi.includes(index)) {
         return "#menu-multi-tiles"
@@ -91,7 +98,7 @@ export default {
         return "#menu-other"
       } else {
         return "#menu-basic-tiles"
-      }
+      } */
     },
     
     range(bottom, top) {
