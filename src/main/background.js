@@ -28,6 +28,7 @@ async function createWindow() {
       preload: path.resolve(__static, 'preload.js')
     }
   })
+  win.maximize()
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
