@@ -125,6 +125,9 @@ class levelData {
   getSignMessages() {
     return this.signMessages
   }
+  getStartPoint() {
+    return [this.startX, this.startY]
+  }
 }
 
 let activeLevel = null;
