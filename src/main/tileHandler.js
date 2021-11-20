@@ -69,6 +69,7 @@ class Tile {
 }
 
 export default {
+  Tile,
   tileLibrary: [
     new Tile(0, "air", null), // tools
     new Tile(1, "sign", "1345.png"), // /tools 0-1
