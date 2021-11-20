@@ -140,6 +140,9 @@ export default {
 
   addSignData: ipcMain.on("ADD_SIGN_DATA", (event, payload) => {
     projectHandler.getActiveLevel().addSignMessage(payload[0], payload[1], payload[2])
-  })
+  }),
 
+  setStartLocation: ipcMain.on("SET_START_LOCATION", (event, payload) => {
+    projectHandler.getActiveLevel().setStartPoint(payload[0], payload[1])
+  })
 }

@@ -25,6 +25,7 @@ const validChannels = [
   "GET_IS_OUTSIDE",
   "CHANGE_WIDTH",
   "CHANGE_HEIGHT",
+  "SET_START_LOCATION",
 ];
 
 contextBridge.exposeInMainWorld(
