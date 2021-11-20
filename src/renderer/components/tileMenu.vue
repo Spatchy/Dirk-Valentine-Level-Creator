@@ -1,7 +1,9 @@
 <template>
   <div class="tile-menu">
     Tools
-    <div id="menu-tools"></div>
+    <div id="menu-tools">
+      <tile-display v-if="characterSpriteTile" :tile="characterSpriteTile" :selectedTile="selectedTile" @selected="selectTile($event)"></tile-display>
+    </div>
     Basic Tiles
     <div id="menu-basic"></div>
     Multi-Tiles (mostly decorative)
@@ -31,7 +33,8 @@ export default {
   name: "tileMenu",
   props: {
     tileSet: Array,
-    selectedTile: Number
+    selectedTile: Number,
+    characterSpriteTile: Object
   },
   components: {
     tileDisplay

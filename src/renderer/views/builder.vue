@@ -20,6 +20,7 @@
         <tile-menu
           :tileSet="tileset"
           :selectedTile="selectedTile"
+          :characterSpriteTile="characterSpriteTile"
           @selectTile="changeSelectedTile($event)"
         >
         </tile-menu>
@@ -30,6 +31,7 @@
           :initialHeight="newLevelHeight"
           :selectedTile="selectedTile"
           :tileSet="tileset"
+          :characterSpriteTile="characterSpriteTile"
           @saveLevel="saveLevel()"
         ></level-canvas>
       </div>
@@ -48,6 +50,7 @@ export default {
       tileset: [],
       selectedTile: 0,
       selectedLayer: 0,
+      characterSpriteTile: null
     };
   },
   props: {
@@ -66,6 +69,7 @@ export default {
   },
   mounted() {
     window.ipc.send("GET_TILES", "")
+    window.ipc.send("GET_CHARACTER_SPRITE")
 
     window.ipc.on("GET_TILES", (response) => {
       this.tileset.push(response);
@@ -73,6 +77,11 @@ export default {
         window.ipc.send("OPEN_LEVEL_DATA", this.newDir);
       }
     });
+
+    window.ipc.on("GET_CHARACTER_SPRITE", response => {
+      this.characterSpriteTile = response
+      console.log(this.characterSpriteTile)
+    })
   },
   methods: {
     changeSelectedTile(tileId) {
