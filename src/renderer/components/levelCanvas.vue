@@ -14,7 +14,7 @@
   <div ref="canvasStack" id="canvasStack">
     <canvas ref="backgroundCanvas" :height="canvasHeight" :width="canvasWidth" style="z-index: -1"></canvas>
     <canvas v-for="(n, i) in numberOfLayers" :key="i" :ref="`canvasLayer${i}`" :height="canvasHeight" :width="canvasWidth" :style="`z-index: ${i}`"></canvas>
-    <canvas ref="selectionCanvas" :height="canvasHeight" :width="canvasWidth" @click="canvasAction($event)" style="z-index: 99999"></canvas>
+    <canvas ref="canvasLayerSelectionCanvas" :height="canvasHeight" :width="canvasWidth" @click="canvasAction($event)" style="z-index: 99999"></canvas>
   </div>
 
   <div v-if="showSignModal" ref="signModal" class="modal is-active" style="z-index: 99999">
@@ -51,6 +51,7 @@ export default {
     initialHeight: Number,
     tileSet: Array,
     selectedTile: Number,
+    characterSpriteTile: Object
   },
   data() {
     return {
@@ -82,7 +83,6 @@ export default {
     }
   },
   mounted() {
-    console.log("CANVAS MOUNTED")
     window.ipc.send("GET_BACKGROUND_IMAGE_DATA", "")
 
     window.ipc.on("GET_BACKGROUND_IMAGE_DATA", response => {
@@ -93,6 +93,7 @@ export default {
     window.ipc.on("OPEN_LEVEL_DATA", response => {
       this.numberOfLayers = response.length
       window.ipc.send("GET_IS_OUTSIDE")
+      window.ipc.send("GET_START_LOCATION")
       this.$nextTick(() => {
         this.paintCanvasLayers(response)
       })
@@ -102,6 +103,15 @@ export default {
       this.isOutside = response
       this.$nextTick(() => {
         this.paintBackgroundCanvas(this.isOutside)
+      })
+    })
+
+    window.ipc.on("GET_START_LOCATION", response => {
+      this.$nextTick(() => {
+        this.setStart(response[0], response[1], () => {
+          console.log(response)
+          this.paintTile(this.characterSpriteTile, response[0]*64, response[1]*64, "SelectionCanvas")
+        })
       })
     })
 
@@ -121,10 +131,15 @@ export default {
       const y = xy[1]
       const tileX = this.translatePosition(x)
       const tileY = this.translatePosition(y)
-      const tile = this.tileSet[this.selectedTile]
-      this.doSpecialTileActions(tile, tileX/64, tileY/64, () => {
-        this.clearTile(tileX, tileY)
-        this.paintTile(tile, tileX, tileY)
+      let tile
+      if(this.selectedTile === -1) {
+        tile = this.characterSpriteTile
+      } else {
+        tile = this.tileSet[this.selectedTile]
+      }
+      this.doSpecialTileActions(tile, tileX/64, tileY/64, (layerOverride) => {
+        this.clearTile(tileX, tileY, layerOverride)
+        this.paintTile(tile, tileX, tileY, layerOverride)
         window.ipc.send("INSERT_TILE", [tile.number, tileX/64, tileY/64, this.selectedLayer])
         if(tile.height > 1 || tile.width > 1) {
           this.abnormalTileIndex[`${this.selectedLayer}:${tileX}x${tileY}`] = [tile.width, tile.height]
@@ -134,7 +149,7 @@ export default {
     },
 
     getCursorPosition(event) {
-      const canvas = this.$refs.selectionCanvas
+      const canvas = this.$refs.canvasLayerSelectionCanvas
       const rect = canvas.getBoundingClientRect()
       const x = event.clientX - rect.left
       const y = event.clientY - rect.top
@@ -152,11 +167,11 @@ export default {
       ctx.drawImage(imageElem, x, y)
     },
 
-    clearTile(x, y) {
-      const ctx = this.$refs[`canvasLayer${this.selectedLayer}`].getContext("2d")
+    clearTile(x, y, layerId = this.selectedLayer) {
+      const ctx = this.$refs[`canvasLayer${layerId}`].getContext("2d")
       let widthMultiplier = 1
       let heightMultiplier = 1
-      const selector = `${this.selectedLayer}:${x}x${y}`
+      const selector = `${layerId}:${x}x${y}`
       if(selector in this.abnormalTileIndex) {
         const abnormalValues = this.abnormalTileIndex[selector]
         widthMultiplier = abnormalValues[0]
@@ -223,9 +238,19 @@ export default {
     doSpecialTileActions(tile, x, y, callback) {
       if(tile.number === 1) { // is sign
         this.placeSign(x, y, callback)
+      } else if(tile.number === -1) { // is set start pseudo-tile
+        this.setStart(x, y, () => {this.paintTile(tile, x*64, y*64, "SelectionCanvas")})
       } else {
         callback() // just carry on if no special actions required
       }
+    },
+
+    setStart(x, y, callback) {
+      const selectionCanvas = this.$refs.canvasLayerSelectionCanvas
+      const ctx = selectionCanvas.getContext("2d")
+      ctx.clearRect(0, 0, selectionCanvas.width, selectionCanvas.height)
+      window.ipc.send("SET_START_LOCATION", [x, y])
+      callback()
     },
 
     placeSign(x, y, callback) {
