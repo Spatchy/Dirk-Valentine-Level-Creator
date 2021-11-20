@@ -70,9 +70,9 @@ class Tile {
 
 export default {
   tileLibrary: [
-    new Tile(0, "air", null),
-    new Tile(1, "sign", "1345.png"),
-    new Tile(2, "unarmored-center", "449.png"),
+    new Tile(0, "air", null), // tools
+    new Tile(1, "sign", "1345.png"), // /tools 0-1
+    new Tile(2, "unarmored-center", "449.png"), // basic
     new Tile(3, "unarmored-center-decoration-1", "452.png"),
     new Tile(4, "unarmored-center-decoration-2", "455.png"),
     new Tile(5, "unarmored-center-decoration-3", "458.png"),
@@ -99,12 +99,12 @@ export default {
     new Tile(26, "armored-ceiling-right", "437.png"),
     new Tile(27, "armored-ceiling-middle-decoration", "440.png"),
     new Tile(28, "armored-center", "443.png"),
-    new Tile(29, "armored-floor-middle-decoration", "446.png"),
-    new Tile(30, "archway-top", "497.png", [], 2),
+    new Tile(29, "armored-floor-middle-decoration", "446.png"), // /basic 2-29
+    new Tile(30, "archway-top", "497.png", [], 2), // multi
     new Tile(31, "archway-pillars-1", "500.png", [], 2),
     new Tile(32, "archway-pillars-2", "503.png", [], 2),
-    new Tile(33, "archway-bottom", "506.png", [], 2),
-    new Tile(34, "pipe-se", "509.png"),
+    new Tile(33, "archway-bottom", "506.png", [], 2), // /multi 30-33
+    new Tile(34, "pipe-se", "509.png"), // decoration
     new Tile(35, "pipe-sw", "512.png"),
     new Tile(36, "pipe-ne", "515.png"),
     new Tile(37, "pipe-nw", "518.png"),
@@ -114,8 +114,8 @@ export default {
     new Tile(41, "pipe-ec-terminate", "530.png"),
     new Tile(42, "pipe-wc-terminate", "533.png"),
     new Tile(43, "pipe-generator-1", "536.png"),
-    new Tile(44, "pipe-generator-2", "539.png"),
-    new Tile(45, "unarmored-one-tall-right", "581.png"),
+    new Tile(44, "pipe-generator-2", "539.png"), // /decoration 34-44
+    new Tile(45, "unarmored-one-tall-right", "581.png"), // basic
     new Tile(46, "unarmored-one-tall-left", "584.png"),
     new Tile(47, "unarmored-floor-one-wide", "587.png"),
     new Tile(48, "unarmored-middle-one-wide", "590.png"),
@@ -129,27 +129,27 @@ export default {
     new Tile(56, "armored-one-wide-2", "569.png"),
     new Tile(57, "armored-one-wide-top", "572.png"),
     new Tile(58, "armored-one-by-one", "575.png"),
-    new Tile(59, "armored-one-wide-bottom", "578.png"),
-    new Tile(60, "UNUSED", null),
-    new Tile(61, "armored-bottom-emblem", "602.png"),
-    new Tile(62, "archway-top-platform", "605.png", [], 2),
-    new Tile(63, "upwards-spotlight", "620.jpeg"),
+    new Tile(59, "armored-one-wide-bottom", "578.png"), // /basic 45-59
+    new Tile(60, "UNUSED", null), // unused / 60
+    new Tile(61, "armored-bottom-emblem", "602.png"), // basic / 61
+    new Tile(62, "archway-top-platform", "605.png", [], 2), // multi / 62
+    new Tile(63, "upwards-spotlight", "620.jpeg"), // decoration
     new Tile(64, "downwards-spotlight", "623.jpeg"),
     new Tile(65, "banner-top-with-spotlight", "608.jpeg"),
     new Tile(66, "banner-bottom-for-spotlight", "611.jpeg"),
     new Tile(67, "banner-top-no-light", "614.jpeg"),
-    new Tile(68, "banner-bottom", "617.jpeg"),
-    new Tile(69, "UNUSED", null),
+    new Tile(68, "banner-bottom", "617.jpeg"), // /decoration 63-68
+    new Tile(69, "UNUSED", null), // unused 
     new Tile(70, "UNUSED", null),
     new Tile(71, "UNUSED", null),
-    new Tile(72, "UNUSED", null),
-    new Tile(73, "unarmored-floor-decoration", "626.png"),
+    new Tile(72, "UNUSED", null),// /unused 69-72
+    new Tile(73, "unarmored-floor-decoration", "626.png"), // basic
     new Tile(74, "unarmored-center-decoration-8", "629.png"),
     new Tile(75, "unarmored-center-decoration-9", "632.png"),
     new Tile(76, "unarmored-center-decoration-10", "635.png"),
     new Tile(77, "unarmored-center-3d-look", "638.png"),
-    new Tile(78, "unarmored-center-GB-flag", "641.png"),
-    new Tile(79, "UNUSED", null),
+    new Tile(78, "unarmored-center-GB-flag", "641.png"), // /basic 73-78
+    new Tile(79, "UNUSED", null),// unused 
     new Tile(80, "UNUSED", null),
     new Tile(81, "UNUSED", null),
     new Tile(82, "UNUSED", null),
@@ -158,8 +158,8 @@ export default {
     new Tile(85, "UNUSED", null),
     new Tile(86, "UNUSED", null),
     new Tile(87, "UNUSED", null),
-    new Tile(88, "UNUSED", null),
-    new Tile(89, "moving-platform-one-by-one-up-1", "795.png"),
+    new Tile(88, "UNUSED", null), // /unused 79-88
+    new Tile(89, "moving-platform-one-by-one-up-1", "795.png"), // moving
     new Tile(90, "moving-platform-one-by-one-right-1", "795.png"),
     new Tile(91, "moving-platform-one-by-one-down-1", "795.png"),
     new Tile(92, "moving-platform-one-by-one-left-1", "795.png"),
@@ -194,8 +194,8 @@ export default {
     new Tile(121, "moving-platform-three-high-up-2", "769.png", [], 1, 3),
     new Tile(122, "moving-platform-three-high-left-2", "769.png", [], 1, 3),
     new Tile(123, "moving-platform-three-high-down-2", "769.png", [], 1, 3),
-    new Tile(124, "moving-platform-three-high-right-2", "769.png", [], 1, 3),
-    new Tile(125, "teleporter-2-way-upwards-1", "873.png", [], 1, 1, 270),
+    new Tile(124, "moving-platform-three-high-right-2", "769.png", [], 1, 3), // /moving 89-124
+    new Tile(125, "teleporter-2-way-upwards-1", "873.png", [], 1, 1, 270), // teleporter
     new Tile(126, "teleporter-2-way-upwards-2", "873.png", [], 1, 1, 270),
     new Tile(127, "teleporter-2-way-upwards-3", "873.png", [], 1, 1, 270),
     new Tile(128, "teleporter-2-way-upwards-4", "873.png", [], 1, 1, 270),
@@ -314,12 +314,12 @@ export default {
     new Tile(241, "teleporter-exit-leftwards-7", "873.png", ["906.png"], 1, 1, 180),
     new Tile(242, "teleporter-exit-leftwards-8", "873.png", ["906.png"], 1, 1, 180),
     new Tile(243, "teleporter-exit-leftwards-9", "873.png", ["906.png"], 1, 1, 180),
-    new Tile(244, "teleporter-exit-leftwards-10", "873.png", ["906.png"], 1, 1, 180),
-    new Tile(245, "chain-anchor-upwards", "856.png", [], 1, 1, 270),
+    new Tile(244, "teleporter-exit-leftwards-10", "873.png", ["906.png"], 1, 1, 180), // /teleporter 125-244
+    new Tile(245, "chain-anchor-upwards", "856.png", [], 1, 1, 270), // moving
     new Tile(246, "chain-anchor-rightwards", "856.png"),
     new Tile(247, "chain-anchor-downwards", "856.png", [], 1, 1, 90),
-    new Tile(248, "chain-anchor-leftwards", "856.png", [], 1, 1, 180),
-    new Tile(249, "missile-launcher-upwards", "844.png"),
+    new Tile(248, "chain-anchor-leftwards", "856.png", [], 1, 1, 180), // /moving 245-248
+    new Tile(249, "missile-launcher-upwards", "844.png"), // hazards
     new Tile(250, "missile-launcher-rightwards", "847.png"),
     new Tile(251, "missile-launcher-downwards", "850.png"),
     new Tile(252, "missile-launcher-leftwards", "853.png"),
@@ -338,14 +338,14 @@ export default {
     new Tile(265, "gas-pipe-intermittent-start-high-upwards", "832.png", [], 1, 1, 270),
     new Tile(266, "gas-pipe-intermittent-start-high-rightwards", "832.png"),
     new Tile(267, "gas-pipe-intermittent-start-high-downwards", "832.png", [], 1, 1, 90),
-    new Tile(268, "gas-pipe-intermittent-start-high-leftwards", "832.png", [], 1, 1, 180),
-    new Tile(269, "enemy-troop-chatting-left-facing", "739.png"),
+    new Tile(268, "gas-pipe-intermittent-start-high-leftwards", "832.png", [], 1, 1, 180), // /hazards 249-268
+    new Tile(269, "enemy-troop-chatting-left-facing", "739.png"), // enemies
     new Tile(270, "enemy-troop-chatting-right-facing", "739.png", [], 1, 1, 0, true),
     new Tile(271, "enemy-troop-crouching-left-facing", "750.png"),
     new Tile(272, "enemy-troop-crouching-right-facing", "750.png", [], 1, 1, 0, true),
-    new Tile(273, "enemy-troop-eating", "757.png"),
-    new Tile(274, "moving-winch-block", "1113.png"),
-    new Tile(275, "blimp-outer-nose-top-left", "1012.png"),
+    new Tile(273, "enemy-troop-eating", "757.png"), // /enemies 269-273
+    new Tile(274, "moving-winch-block", "1113.png"), // moving / 274
+    new Tile(275, "blimp-outer-nose-top-left", "1012.png"), // decoration
     new Tile(276, "blimp-inner-nose-top-left", "1015.png"),
     new Tile(277, "blimp-body-to-nose-top-left", "1018.png"),
     new Tile(278, "blimp-body-no-light-top", "1027.png"),
@@ -386,26 +386,26 @@ export default {
     new Tile(313, "steampunk-cylinder-bottom-left-outer", "1103.png"),
     new Tile(314, "steampunk-cylinder-bottom-left-inner", "1106.png"),
     new Tile(315, "steampunk-cylinder-bottom-right-inner", "1106.png", [], 1, 1, 0, true),
-    new Tile(316, "steampunk-cylinder-bottom-right-outer", "1103.png", [], 1, 1, 0, true),
-    new Tile(317, "enemy-gas-craft-ew-1", "1148.png"),
+    new Tile(316, "steampunk-cylinder-bottom-right-outer", "1103.png", [], 1, 1, 0, true), // /decoration 275-316
+    new Tile(317, "enemy-gas-craft-ew-1", "1148.png"), // enemies
     new Tile(318, "enemy-gas-craft-ew-2", "1148.png"),
     new Tile(319, "enemy-gas-craft-ns-1", "1148.png"),
     new Tile(320, "enemy-gas-craft-ns-2", "1148.png"),
     new Tile(321, "enemy-gas-craft-static", "1148.png"),
     new Tile(322, "Enemy-tank-ew-1", "1135.png"),
-    new Tile(323, "Enemy-tank-ew-2", "1135.png"),
-    new Tile(324, "ally-cage", "1126.png", ["1129.png"]),
-    new Tile(325, "enemy-bomb-craft-static", "1178.png"),
+    new Tile(323, "Enemy-tank-ew-2", "1135.png"), // /enemies 317-323
+    new Tile(324, "ally-cage", "1126.png", ["1129.png"]), // other / 324
+    new Tile(325, "enemy-bomb-craft-static", "1178.png"), // enemies
     new Tile(326, "enemy-bomb-craft-ew-1", "1178.png"),
     new Tile(327, "enemy-bomb-craft-ew-2", "1178.png"),
     new Tile(328, "enemy-bomb-craft-ns-1", "1178.png"),
-    new Tile(329, "enemy-bomb-craft-ns-2", "1178.png"),
-    new Tile(330, "tea-health-collectable", "1217.png"),
+    new Tile(329, "enemy-bomb-craft-ns-2", "1178.png"), // /enemies 325-329
+    new Tile(330, "tea-health-collectable", "1217.png"), // other
     new Tile(331, "medal-collectable", "1205.png"),
-    new Tile(332, "opened-cage", "1129.png"),
-    new Tile(333, "EXIT", "299.png", ["303.png"]),
-    new Tile(334, "already-descended-elevator", "299.png"),
-    new Tile(335, "walker-tank-ew-1", "1259.png"),
+    new Tile(332, "opened-cage", "1129.png"), // /other 330-332
+    new Tile(333, "EXIT", "299.png", ["303.png"]), // tools / 333
+    new Tile(334, "already-descended-elevator", "299.png"), // other / 334
+    new Tile(335, "walker-tank-ew-1", "1259.png"), // enemies
     new Tile(336, "walker-tank-ew-2", "1259.png"),
     new Tile(337, "walker-tank-static", "1259.png"),
     new Tile(338, "enemy-tank-facing-left-ew-1", "1135.png"),
@@ -413,15 +413,15 @@ export default {
     new Tile(340, "enemy-tank-facing-right-ew-1", "1135.png", [], 1, 1, 0, true),
     new Tile(341, "enemy-tank-facing-right-ew-2", "1135.png", [], 1, 1, 0, true),
     new Tile(342, "barron-boss-mid-battle", "1309.png"),
-    new Tile(343, "barron-boss-final-battle", "1309.png"),
-    new Tile(344, "queen-victoria", "1349.png"),
-    new Tile(345, "partially-armored-center-armor-nw", "1358.png"),
+    new Tile(343, "barron-boss-final-battle", "1309.png"), // /enemies 335-343
+    new Tile(344, "queen-victoria", "1349.png"), // other / 344
+    new Tile(345, "partially-armored-center-armor-nw", "1358.png"), // basic
     new Tile(346, "partially-armored-center-armor-ne", "1361.png"),
     new Tile(347, "partially-armored-center-armor-w", "1364.png"),
     new Tile(348, "partially-armored-center-armor-n", "1367.png"),
     new Tile(349, "partially-armored-center-armor-s", "1370.png"),
     new Tile(350, "partially-armored-center-armor-sw", "1373.png"),
     new Tile(351, "partially-armored-center-armor-se", "1376.png"),
-    new Tile(352, "partially-armored-center-armor-e", "1379.png"),
+    new Tile(352, "partially-armored-center-armor-e", "1379.png"), // /basic 345-352
   ]
 }
