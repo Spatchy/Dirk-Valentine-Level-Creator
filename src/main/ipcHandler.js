@@ -144,5 +144,13 @@ export default {
 
   setStartLocation: ipcMain.on("SET_START_LOCATION", (event, payload) => {
     projectHandler.getActiveLevel().setStartPoint(payload[0], payload[1])
+  }),
+
+  getCharacterSprite: ipcMain.on("GET_CHARACTER_SPRITE", (event, payload) => {
+    event.reply("GET_CHARACTER_SPRITE", new tileHandler.Tile(-1, "set-start-point", "308.png", ["310.png"]))
+  }),
+
+  getStartLocation: ipcMain.on("GET_START_LOCATION", (event, payload) => {
+    event.reply("GET_START_LOCATION", projectHandler.getActiveLevel().getStartPoint())
   })
 }
