@@ -12,6 +12,7 @@
                 <ul>
                   <li v-for="i in n[1]" :key="`${n[0]}:${i}`" @click="openLevel(n[0], i)"><a class="level-option">{{`Level ${i}`}}</a></li>
                   <li v-if="n[1] < 24"><button @click="openNewLevelModal(n[0], j)" class="button is-small">+ Add level</button></li>
+                  <li v-if="n[1] > 1"><button @click="openExportModal(n[0])" class="button is-small">Export Project</button></li>
                 </ul>
               </ul>
             </aside>
@@ -20,6 +21,27 @@
             <button class="button is-fullwidth" @click="showNewProjectModal = true">New Project</button>
           </a>
         </nav>
+      </div>
+
+      <div v-if="showExportModal" ref="exportModal" class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Export Project</p>
+              <button class="delete" aria-label="close" @click="closeModals()"></button>
+            </header>
+            <section class="modal-card-body">
+              Project: <input type="text" class="modal-text-area" v-model="exportTitle" />
+              Creator: <input type="text" class="modal-text-area" v-model="exportCreator" />
+              Version: <input type="text" class="modal-text-area" v-model="exportVersion" />
+            </section>
+            <footer class="modal-card-foot">
+              <button class="button is-success" @click="exportProject()" :disabled="disableModalSubmit">Create</button>
+              <button class="button" @click="closeModals()">Cancel</button>
+            </footer>
+          </div>
+        </div>
       </div>
 
       <div v-if="showNewProjectModal" ref="newProjectModal" class="modal is-active">
@@ -83,6 +105,11 @@ export default {
       disableModalSubmit: true, // prevent sending blank data
       projectToAddTo: null,
       projectToAddToIndex: null,
+      showExportModal: false,
+      exportTitle: null,
+      exportCreator: null,
+      exportVersion: null,
+      exportFolderName: null,
     }
   },
   mounted() {
@@ -90,7 +117,6 @@ export default {
 
     window.ipc.on("GET_PROJECTS", response => {
       this.projectsList = response
-      console.log(this.projectsList)
     })
   },
   emits: [
@@ -110,7 +136,6 @@ export default {
     },
 
     openLevel(project, levelNum) {
-      console.log("got 1")
       this.$emit("openExisting", [project, levelNum])
     },
 
@@ -128,13 +153,29 @@ export default {
       this.showNewLevelModal = true
     },
 
+    openExportModal(proj) {
+      this.exportTitle = proj
+      this.exportFolderName = proj
+      this.showExportModal = true
+    },
+
+    exportProject() {
+      console.log("exporting: " + [this.exportTitle, this.exportCreator, this.exportVersion, this.exportFolderName])
+      window.ipc.send("EXPORT_TO_FLASHPOINT", [this.exportTitle, this.exportCreator, this.exportVersion, this.exportFolderName])
+      this.closeModals()
+    },
+
     closeModals() {
       this.showNewProjectModal = false
       this.showNewLevelModal = false
+      this.showExportModal = false
+      this.disableModalSubmit = true
       this.newProjectName = null
       this.newLevelWidth = null
       this.newLevelHeight = null
-      this.disableModalSubmit = true
+      this.exportTitle = null
+      this.exportCreator = null
+      this.exportVersion = null
     },
 
     checkValidDimenstions() {
@@ -147,6 +188,19 @@ export default {
       } else {
         this.disableModalSubmit = false
       }
+    },
+
+    checkValidExportData() {
+      const title = this.exportTitle
+      const creator = this.exportCreator
+      const ver = this.exportVersion
+    
+      if((title && creator && ver) && title.length > 0 && creator.length > 0 && ver.length > 0) {
+        this.disableModalSubmit = false
+      } else {
+        this.disableModalSubmit = true
+      }
+    
     }
   },
   watch: {
@@ -167,6 +221,18 @@ export default {
 
     newLevelHeight() {
       this.checkValidDimenstions()
+    },
+
+    exportTitle() {
+      this.checkValidExportData()
+    },
+
+    exportCreator() {
+      this.checkValidExportData()
+    },
+
+    exportVersion() {
+      this.checkValidExportData()
     }
   }
 }
