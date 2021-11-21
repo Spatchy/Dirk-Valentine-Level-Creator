@@ -15,10 +15,13 @@
   "dependencies": {
     "bulma": "^0.9.3",
     "core-js": "^3.6.5",
+    "js-yaml": "^4.1.0",
     "merge-images-v2": "^2.0.1",
     "node-pty": "^0.10.1",
     "replace-color": "^2.3.0",
     "sharp": "^0.29.3",
+    "sudo-prompt": "^9.2.1",
+    "uuid": "^8.3.2",
     "vue": "^3.0.0",
     "xml-js": "^1.6.11"
   },
