@@ -16,6 +16,7 @@
     "bulma": "^0.9.3",
     "core-js": "^3.6.5",
     "js-yaml": "^4.1.0",
+    "jszip": "^3.7.1",
     "merge-images-v2": "^2.0.1",
     "node-pty": "^0.10.1",
     "replace-color": "^2.3.0",
