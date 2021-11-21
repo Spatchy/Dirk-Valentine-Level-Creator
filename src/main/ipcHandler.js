@@ -156,5 +156,25 @@ export default {
 
   exportToFlashpoint: ipcMain.on("EXPORT_TO_FLASHPOINT", (event, payload) => {
     swfHandler.exportToFlashpoint(payload[0], payload[1], payload[2], payload[3])
+  }),
+
+  exportDvpack: ipcMain.on("EXPORT_DVPACK", async (event, payload) => {
+    let savePath = await dialog.showSaveDialog(mainWindow, {
+      title:"Save Level Pack", 
+      defaultPath:payload[0], 
+      filters:[
+        {
+          name:"DVLC Level Pack", 
+          extensions:["dvpack"]
+        }
+      ]
+    })
+    .catch((e) => {
+      console.log(e);
+    })
+    console.log(savePath)
+    if(!savePath.canceled) {
+      swfHandler.exportDvpack(payload[0], payload[1], payload[2], payload[3], savePath.filePath)
+    }
   })
 }
