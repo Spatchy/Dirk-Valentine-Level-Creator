@@ -32,9 +32,12 @@
               <button class="delete" aria-label="close" @click="closeModals()"></button>
             </header>
             <section class="modal-card-body">
-              Project: <input type="text" class="modal-text-area" v-model="exportTitle" />
-              Creator: <input type="text" class="modal-text-area" v-model="exportCreator" />
-              Version: <input type="text" class="modal-text-area" v-model="exportVersion" />
+              <div v-if="!(exportToFlashpoint || exportDvpack)" class="has-text-danger is-size-7">Please select at least one export option</div>
+              <div>Export To Flashpoint: <input type="checkbox" v-model="exportToFlashpoint"></div>
+              <div>Export Shareable DVpack: <input type="checkbox" v-model="exportDvpack"></div>
+              <div>Project: <input type="text" class="modal-text-area" v-model="exportTitle" /></div>
+              <div>Creator: <input type="text" class="modal-text-area" v-model="exportCreator" /></div>
+              <div>Version: <input type="text" class="modal-text-area" v-model="exportVersion" /></div>
             </section>
             <footer class="modal-card-foot">
               <button class="button is-success" @click="exportProject()" :disabled="disableModalSubmit">Create</button>
@@ -110,6 +113,8 @@ export default {
       exportCreator: null,
       exportVersion: null,
       exportFolderName: null,
+      exportToFlashpoint: true,
+      exportDvpack: true,
     }
   },
   mounted() {
@@ -160,8 +165,12 @@ export default {
     },
 
     exportProject() {
-      console.log("exporting: " + [this.exportTitle, this.exportCreator, this.exportVersion, this.exportFolderName])
-      window.ipc.send("EXPORT_TO_FLASHPOINT", [this.exportTitle, this.exportCreator, this.exportVersion, this.exportFolderName])
+      if(this.exportDvpack) {
+        window.ipc.send("EXPORT_DVPACK", [this.exportTitle, this.exportCreator, this.exportVersion, this.exportFolderName])
+      }
+      if(this.exportToFlashpoint) {
+        window.ipc.send("EXPORT_TO_FLASHPOINT", [this.exportTitle, this.exportCreator, this.exportVersion, this.exportFolderName])
+      }
       this.closeModals()
     },
 
@@ -195,7 +204,7 @@ export default {
       const creator = this.exportCreator
       const ver = this.exportVersion
     
-      if((title && creator && ver) && title.length > 0 && creator.length > 0 && ver.length > 0) {
+      if((this.exportToFlashpoint || this.exportDvpack) && (title && creator && ver) && title.length > 0 && creator.length > 0 && ver.length > 0) {
         this.disableModalSubmit = false
       } else {
         this.disableModalSubmit = true

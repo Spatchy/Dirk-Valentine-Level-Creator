@@ -1,11 +1,12 @@
-import { get } from 'http';
-import fs from 'fs';
-import settingsManager from './settingsManager';
+import { get } from 'http'
+import fs from 'fs'
+import settingsManager from './settingsManager'
 import {v4 as uuid} from "uuid"
 import yaml from "js-yaml"
 import sudo from "sudo-prompt"
+import JSZip from 'jszip'
 
-const location = settingsManager.appdata + "/projects/";
+const location = settingsManager.appdata + "/projects/"
 
 class YamlTemplate {
   constructor(title, creator, version) {
@@ -72,6 +73,33 @@ export default {
         }
         console.log("EXPORTED TO FLASHPOINT!")
       })
+    })
+  },
+
+  exportDvpack(title, creator, version, projectName, savePath) {
+    const manifestData = {
+      dvpackVersion: 1,
+      title: title,
+      creator: creator,
+      version: version
+    }
+
+    const dvpack = new JSZip()
+    dvpack.file("manifest.json", JSON.stringify(manifestData))
+    const levels = dvpack.folder("levels")
+    fs.readdirSync(location + "working/" + projectName, {withFileTypes:true}).forEach(file => {
+      levels.file(file.name, fs.readFileSync(location + "working/" + projectName + "/" + file.name))
+    });
+
+    const exportData = dvpack.generateAsync({type:"nodebuffer"})
+    exportData.then(content => {
+      if(!fs.existsSync(location + "exports/")) {
+        fs.mkdirSync(location + "exports/")
+      }
+      fs.writeFileSync(savePath, content)
+    })
+    exportData.catch(e => {
+      throw e
     })
   }
 }
