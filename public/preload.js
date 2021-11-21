@@ -27,7 +27,8 @@ const validChannels = [
   "CHANGE_HEIGHT",
   "SET_START_LOCATION",
   "GET_CHARACTER_SPRITE",
-  "GET_START_LOCATION"
+  "GET_START_LOCATION",
+  "EXPORT_TO_FLASHPOINT",
 ];
 
 contextBridge.exposeInMainWorld(

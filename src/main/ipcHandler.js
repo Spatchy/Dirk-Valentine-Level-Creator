@@ -152,5 +152,9 @@ export default {
 
   getStartLocation: ipcMain.on("GET_START_LOCATION", (event, payload) => {
     event.reply("GET_START_LOCATION", projectHandler.getActiveLevel().getStartPoint())
+  }),
+
+  exportToFlashpoint: ipcMain.on("EXPORT_TO_FLASHPOINT", (event, payload) => {
+    swfHandler.exportToFlashpoint(payload[0], payload[1], payload[2], payload[3])
   })
 }
