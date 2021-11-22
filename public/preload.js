@@ -30,6 +30,7 @@ const validChannels = [
   "GET_START_LOCATION",
   "EXPORT_TO_FLASHPOINT",
   "EXPORT_DVPACK",
+  "IMPORT_DVPACK"
 ];
 
 contextBridge.exposeInMainWorld(

@@ -176,5 +176,30 @@ export default {
     if(!savePath.canceled) {
       swfHandler.exportDvpack(payload[0], payload[1], payload[2], payload[3], savePath.filePath)
     }
+  }),
+
+  importDvpack: ipcMain.on("IMPORT_DVPACK", async (event, payload) => {
+    let paths;
+    if(payload.length > 0) {
+      paths = payload
+    } else {
+      let result = await dialog.showOpenDialog(mainWindow, {
+        properties: ["multiSelections"],
+        title: "Open Level Pack",
+        filters:[
+          {
+            name:"DVLC Level Pack", 
+            extensions:["dvpack"]
+          }
+        ]
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      paths = result.filePaths;
+    }
+    swfHandler.import(paths, () => {
+      event.reply("IMPORT_DVPACK")
+    })
   })
 }
