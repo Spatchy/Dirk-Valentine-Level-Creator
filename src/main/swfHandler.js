@@ -5,6 +5,7 @@ import {v4 as uuid} from "uuid"
 import yaml from "js-yaml"
 import sudo from "sudo-prompt"
 import JSZip from 'jszip'
+import { Console } from 'console'
 
 const location = settingsManager.appdata + "/projects/"
 
@@ -100,6 +101,30 @@ export default {
     })
     exportData.catch(e => {
       throw e
+    })
+  },
+
+  import(paths, callback) {
+    paths.forEach(path => {
+      JSZip.loadAsync(fs.readFileSync(path)).then(dvpack => {
+        const manifest = dvpack.files["manifest.json"].async("text").then((data) => {
+          const manifestData = JSON.parse(data)
+          const projectDir = location + "working/" + manifestData["title"]
+          if(!fs.existsSync()) {
+            fs.mkdirSync(projectDir)
+            Object.keys(dvpack.files).forEach(entry => {
+              if(entry.endsWith(".xml")) {
+                dvpack.files[entry].async("nodebuffer").then(content => {
+                  fs.writeFileSync(projectDir + "/" + entry.replace("levels/", ""), content)
+                  callback()
+                })
+              }
+            })
+          } else {
+            //should probably send an error message or something
+          }
+        })
+      })
     })
   }
 }

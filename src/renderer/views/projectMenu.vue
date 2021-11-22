@@ -1,6 +1,6 @@
 <template>
-  <div class="columns is-centered">
-    <div class="column is-half full-height">
+  <div class="columns">
+    <div class="column is-two-thirds full-height">
       <div class="column-scrollable">
         <nav class="panel">
           <p class="panel-heading">Projects</p>
@@ -22,71 +22,95 @@
           </a>
         </nav>
       </div>
+    </div>
 
-      <div v-if="showExportModal" ref="exportModal" class="modal is-active">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Export Project</p>
-              <button class="delete" aria-label="close" @click="closeModals()"></button>
-            </header>
-            <section class="modal-card-body">
-              <div v-if="!(exportToFlashpoint || exportDvpack)" class="has-text-danger is-size-7">Please select at least one export option</div>
-              <div>Export To Flashpoint: <input type="checkbox" v-model="exportToFlashpoint"></div>
-              <div>Export Shareable DVpack: <input type="checkbox" v-model="exportDvpack"></div>
-              <div>Project: <input type="text" class="modal-text-area" v-model="exportTitle" /></div>
-              <div>Creator: <input type="text" class="modal-text-area" v-model="exportCreator" /></div>
-              <div>Version: <input type="text" class="modal-text-area" v-model="exportVersion" /></div>
-            </section>
-            <footer class="modal-card-foot">
-              <button class="button is-success" @click="exportProject()" :disabled="disableModalSubmit">Create</button>
-              <button class="button" @click="closeModals()">Cancel</button>
-            </footer>
+    <div class="column full-height">
+      <nav class="panel">
+        <p class="panel-heading">Import</p>
+        <div @drop.prevent="dropDvpack($event)" @dragover.prevent>
+          <div class="columns is-centered my-1">
+            <div class="column is-half">
+                <article class="notification drop-container">
+                  <article class="notification drop-square">
+                    <div class="drop-inner level">
+                      <div class="drop-text level-item">
+                        Drop your .dvpack file here
+                      </div>
+                    </div>
+                  </article>
+                </article>
+            </div>
           </div>
         </div>
+        <a class="panel-block">
+          <button class="button is-fullwidth" @click="chooseDvpack()">Choose File</button>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <div v-if="showExportModal" ref="exportModal" class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Export Project</p>
+          <button class="delete" aria-label="close" @click="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+          <div v-if="!(exportToFlashpoint || exportDvpack)" class="has-text-danger is-size-7">Please select at least one export option</div>
+          <div>Export To Flashpoint: <input type="checkbox" v-model="exportToFlashpoint"></div>
+          <div>Export Shareable DVpack: <input type="checkbox" v-model="exportDvpack"></div>
+          <div>Project: <input type="text" class="modal-text-area" v-model="exportTitle" /></div>
+          <div>Creator: <input type="text" class="modal-text-area" v-model="exportCreator" /></div>
+          <div>Version: <input type="text" class="modal-text-area" v-model="exportVersion" /></div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="exportProject()" :disabled="disableModalSubmit">Create</button>
+          <button class="button" @click="closeModals()">Cancel</button>
+        </footer>
       </div>
+    </div>
+  </div>
 
-      <div v-if="showNewProjectModal" ref="newProjectModal" class="modal is-active">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Create Project</p>
-              <button class="delete" aria-label="close" @click="closeModals()"></button>
-            </header>
-            <section class="modal-card-body">
-              <p>Choose a name for the new project</p>
-              <input type="text" class="modal-text-area" v-model="newProjectName" />
-            </section>
-            <footer class="modal-card-foot">
-              <button class="button is-success" @click="newProject()" :disabled="disableModalSubmit">Create</button>
-              <button class="button" @click="closeModals()">Cancel</button>
-            </footer>
-          </div>
-        </div>
+  <div v-if="showNewProjectModal" ref="newProjectModal" class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Create Project</p>
+          <button class="delete" aria-label="close" @click="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>Choose a name for the new project</p>
+          <input type="text" class="modal-text-area" v-model="newProjectName" />
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="newProject()" :disabled="disableModalSubmit">Create</button>
+          <button class="button" @click="closeModals()">Cancel</button>
+        </footer>
       </div>
+    </div>
+  </div>
 
-      <div v-if="showNewLevelModal" ref="newLevelModal" class="modal is-active">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Create Level</p>
-              <button class="delete" aria-label="close" @click="closeModals()"></button>
-            </header>
-            <section class="modal-card-body">
-              <p>Input starting dimensions for the level in tiles (these can be changed later)</p>
-              <p>Tip: for best results, use numbers between 8 and 64 (minimum of 4 allowed) </p>
-              <input type="number" v-model="newLevelWidth" placeholder="width" />
-              <input type="number" v-model="newLevelHeight" placeholder="height" />
-            </section>
-            <footer class="modal-card-foot">
-              <button class="button is-success" @click="newLevel()" :disabled="disableModalSubmit">Create</button>
-              <button class="button" @click="closeModals()">Cancel</button>
-            </footer>
-          </div>
-        </div>
+  <div v-if="showNewLevelModal" ref="newLevelModal" class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Create Level</p>
+          <button class="delete" aria-label="close" @click="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>Input starting dimensions for the level in tiles (these can be changed later)</p>
+          <p>Tip: for best results, use numbers between 8 and 64 (minimum of 4 allowed) </p>
+          <input type="number" v-model="newLevelWidth" placeholder="width" />
+          <input type="number" v-model="newLevelHeight" placeholder="height" />
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" @click="newLevel()" :disabled="disableModalSubmit">Create</button>
+          <button class="button" @click="closeModals()">Cancel</button>
+        </footer>
       </div>
     </div>
   </div>
@@ -122,6 +146,10 @@ export default {
 
     window.ipc.on("GET_PROJECTS", response => {
       this.projectsList = response
+    })
+
+    window.ipc.on("IMPORT_DVPACK", () => { // refresh projects list when import finished
+      window.ipc.send("GET_PROJECTS", "")
     })
   },
   emits: [
@@ -172,6 +200,18 @@ export default {
         window.ipc.send("EXPORT_TO_FLASHPOINT", [this.exportTitle, this.exportCreator, this.exportVersion, this.exportFolderName])
       }
       this.closeModals()
+    },
+
+    dropDvpack(e) {
+      const files = e.dataTransfer.files
+      const paths = [...files].filter(file => file.name.endsWith(".dvpack")).map(file => file.path)
+      if(paths.length > 0) {
+        window.ipc.send("IMPORT_DVPACK", paths)
+      }
+    },
+
+    chooseDvpack() {
+      window.ipc.send("IMPORT_DVPACK", [])
     },
 
     closeModals() {
@@ -255,5 +295,36 @@ export default {
 
   .level-option:hover {
     text-decoration: underline;
+  }
+
+  .drop-container {
+    padding: 24px;
+  }
+
+  .drop-square {
+    border-style: dashed;
+    border-color: black;
+    border-width: 4px;
+    padding-top: 75%;
+    width: 100%;
+    position: relative;
+  }
+
+  .drop-inner{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .drop-text {
+    text-align: center;
+    width: 50%;
+    margin: auto;
+    height: 100%;
   }
 </style>
