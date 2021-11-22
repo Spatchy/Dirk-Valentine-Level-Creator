@@ -1,39 +1,69 @@
 <template>
-  <div class="columns">
+  <div class="columns m-1">
     <div class="column is-two-thirds full-height">
       <div class="column-scrollable">
-        <nav class="panel">
+        <nav class="panel is-link">
           <p class="panel-heading">Projects</p>
-          <a v-for="(n, j) in projectsList" :key="n[0]" :id="n[0]" :ref="`projectItem${n[0]}`" @click="toggleExpandProject($event, n[0])" class="panel-block">
-            <p v-if="!(expand == n[0])"><span class="panel-icon"><i class="fas fa-folder"></i></span>{{n[0]}}</p>
+          <a v-for="(n, j) in projectsList" :key="n[0]" :id="n[0]" :ref="`projectItem${n[0]}`" @click="toggleExpandProject($event, n[0])" class="panel-block is-block">
+            <nav v-if="!(expand == n[0])" class="level is-fullwidth">
+              <div class="level-left">
+                <div class="level-item">
+                  <p><span class="panel-icon"><i class="fas fa-folder"></i></span>{{n[0]}}</p>
+                </div>
+              </div>
+              <div class="level-right">
+                <div v-if="n[1] > 0" class="level-item">
+                  <button @click="openExportModal(n[0])" class="button is-small is-link">
+                    <span class="icon is-small">
+                      <i class="fas fa-file-export"></i>
+                    </span>
+                    <span>Export Project</span>
+                  </button>
+                </div>
+                <div class="level-item">
+                  <button @click="openDeleteModal(n[0])" class="button is-small is-danger">
+                    <span class="icon is-small">
+                      <i class="fas fa-trash-alt"></i>
+                    </span>
+                    <span>Delete Project</span>
+                  </button>
+                </div>
+              </div>
+            </nav>
             <aside v-if="expand == n[0]" class="menu">
               <ul class="menu-list">
                 <a><span class="panel-icon"><i class="fas fa-folder"></i></span><b>{{n[0]}}</b></a>
                 <ul>
                   <li v-for="i in n[1]" :key="`${n[0]}:${i}`" @click="openLevel(n[0], i)"><a class="level-option">{{`Level ${i}`}}</a></li>
-                  <li v-if="n[1] < 24"><button @click="openNewLevelModal(n[0], j)" class="button is-small">+ Add level</button></li>
-                  <li v-if="n[1] > 1"><button @click="openExportModal(n[0])" class="button is-small">Export Project</button></li>
+                  <li v-if="n[1] < 24">
+                    <button @click="openNewLevelModal(n[0], j)" class="button is-small is-link">
+                      <span class="icon is-small">
+                        <i class="fas fa-plus"></i>
+                      </span>
+                      <span>Add level</span>
+                    </button>
+                  </li>
                 </ul>
               </ul>
             </aside>
           </a>
           <a class="panel-block">
-            <button class="button is-fullwidth" @click="showNewProjectModal = true">New Project</button>
+            <button class="button is-fullwidth is-link is-outlined" @click="showNewProjectModal = true">New Project</button>
           </a>
         </nav>
       </div>
     </div>
 
     <div class="column full-height">
-      <nav class="panel">
+      <nav class="panel is-link">
         <p class="panel-heading">Import</p>
         <div @drop.prevent="dropDvpack($event)" @dragover.prevent>
           <div class="columns is-centered my-1">
             <div class="column is-half">
-                <article class="notification drop-container">
-                  <article class="notification drop-square">
+                <article class="notification drop-container is-link">
+                  <article class="notification drop-square is-link">
                     <div class="drop-inner level">
-                      <div class="drop-text level-item">
+                      <div class="drop-text level-item has-text-white">
                         Drop your .dvpack file here
                       </div>
                     </div>
@@ -43,7 +73,7 @@
           </div>
         </div>
         <a class="panel-block">
-          <button class="button is-fullwidth" @click="chooseDvpack()">Choose File</button>
+          <button class="button is-fullwidth is-link is-outlined" @click="chooseDvpack()">Choose File</button>
         </a>
       </nav>
     </div>
@@ -114,6 +144,26 @@
       </div>
     </div>
   </div>
+
+  <div v-if="showDeleteModal" ref="deleteModal" class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Delete Project</p>
+          <button class="delete" aria-label="close" @click="closeModals()"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>Are you sure you want to delete the project <strong>{{projToDelete}}</strong>? <br/> (it is recommended you export a .dvpack first in case you want to restore it)</p>
+          <p class="has-text-danger">Deleting a project will make it unplayable from Flashpoint</p>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-danger" @click="deleteProject()">Delete Project</button>
+          <button class="button" @click="closeModals()">Cancel</button>
+        </footer>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -139,6 +189,8 @@ export default {
       exportFolderName: null,
       exportToFlashpoint: true,
       exportDvpack: true,
+      projToDelete: null,
+      showDeleteModal: false,
     }
   },
   mounted() {
@@ -202,6 +254,16 @@ export default {
       this.closeModals()
     },
 
+    openDeleteModal(proj) {
+      this.projToDelete = proj
+      this.showDeleteModal = true
+    },
+
+    deleteProject() {
+      window.ipc.send("DELETE_PROJECT", this.projToDelete)
+      this.closeModals()
+    },
+
     dropDvpack(e) {
       const files = e.dataTransfer.files
       const paths = [...files].filter(file => file.name.endsWith(".dvpack")).map(file => file.path)
@@ -218,6 +280,7 @@ export default {
       this.showNewProjectModal = false
       this.showNewLevelModal = false
       this.showExportModal = false
+      this.showDeleteModal = false
       this.disableModalSubmit = true
       this.newProjectName = null
       this.newLevelWidth = null
@@ -225,6 +288,7 @@ export default {
       this.exportTitle = null
       this.exportCreator = null
       this.exportVersion = null
+      this.projToDelete = null
     },
 
     checkValidDimenstions() {
@@ -288,6 +352,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
   .column-scollable {
     height: 400px;
     overflow: auto;
@@ -303,7 +368,7 @@ export default {
 
   .drop-square {
     border-style: dashed;
-    border-color: black;
+    border-color: white;
     border-width: 4px;
     padding-top: 75%;
     width: 100%;
@@ -326,5 +391,10 @@ export default {
     width: 50%;
     margin: auto;
     height: 100%;
+  }
+
+  .level-spacer {
+    margin-left: auto;
+    margin-right: auto;
   }
 </style>
