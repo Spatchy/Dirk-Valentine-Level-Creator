@@ -30,7 +30,8 @@ const validChannels = [
   "GET_START_LOCATION",
   "EXPORT_TO_FLASHPOINT",
   "EXPORT_DVPACK",
-  "IMPORT_DVPACK"
+  "IMPORT_DVPACK",
+  "DELETE_PROJECT",
 ];
 
 contextBridge.exposeInMainWorld(

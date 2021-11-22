@@ -126,5 +126,10 @@ export default {
         })
       })
     })
+  },
+
+  deleteProject(project, callback) {
+    fs.rmSync(location + "working/" + project, {recursive: true})
+    callback()
   }
 }

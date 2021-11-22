@@ -201,5 +201,11 @@ export default {
     swfHandler.import(paths, () => {
       event.reply("IMPORT_DVPACK")
     })
+  }),
+
+  deleteProject: ipcMain.on("DELETE_PROJECT", (event, payload) => {
+    swfHandler.deleteProject(payload, () => {
+      event.reply("IMPORT_DVPACK") // all this does is refresh projects list
+    })
   })
 }
