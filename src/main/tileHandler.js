@@ -404,7 +404,7 @@ export default {
     new Tile(330, "tea-health-collectable", "1217.png"), // other
     new Tile(331, "medal-collectable", "1205.png"),
     new Tile(332, "opened-cage", "1129.png"), // /other 330-332
-    new Tile(333, "EXIT", "299.png", ["303.png"]), // tools / 333
+    new Tile(333, "EXIT", "303.png"), // tools / 333
     new Tile(334, "already-descended-elevator", "299.png"), // other / 334
     new Tile(335, "walker-tank-ew-1", "1259.png"), // enemies
     new Tile(336, "walker-tank-ew-2", "1259.png"),
