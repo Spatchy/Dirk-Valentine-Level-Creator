@@ -65,7 +65,8 @@ export default {
       basic: this.basic,
       multi: this.multi,
       decoration: this.decoration,
-      moving: this.moving, 
+      moving: this.moving,
+      teleporters: this.teleporters,
       hazards: this.hazards, 
       enemies: this.enemies,
       other: this.other
@@ -79,6 +80,8 @@ export default {
   methods: {
     selectTile(tileId) {
       this.$emit("selectTile", tileId)
+      console.log(this.teleporters)
+      console.log(this.lookupTable)
     },
 
     returnGroupId(index) {
