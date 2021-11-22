@@ -80,8 +80,6 @@ export default {
   methods: {
     selectTile(tileId) {
       this.$emit("selectTile", tileId)
-      console.log(this.teleporters)
-      console.log(this.lookupTable)
     },
 
     returnGroupId(index) {
