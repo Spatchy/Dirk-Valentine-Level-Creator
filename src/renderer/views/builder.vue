@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="notification is-info">
-      <div class="level is-mobile">
+    <div class="hero is-link">
+      <div class="level is-mobile m-4">
         <div class="level-left">
           <div class="level-item">
-            <button @click="goBack()"><span class="icon"><i class="fas fa-arrow-left"></i></span></button>
+            <button @click="goBack()" class="button is-link is-large"><span class="icon is-large"><i class="fas fa-arrow-left"></i></span></button>
           </div>
         </div>
         <div class="level-item has-text-centered">
@@ -15,25 +15,27 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column is-one-third">
-        <tile-menu
-          :tileSet="tileset"
-          :selectedTile="selectedTile"
-          :characterSpriteTile="characterSpriteTile"
-          @selectTile="changeSelectedTile($event)"
-        >
-        </tile-menu>
-      </div>
-      <div class="column">
-        <level-canvas
-          :initialWidth="newLevelWidth"
-          :initialHeight="newLevelHeight"
-          :selectedTile="selectedTile"
-          :tileSet="tileset"
-          :characterSpriteTile="characterSpriteTile"
-          @saveLevel="saveLevel()"
-        ></level-canvas>
+    <div class="mt-5 m-1" style="z-index: -2">
+      <div class="columns my-3 mx-1">
+        <div class="column is-one-third">
+          <tile-menu
+            :tileSet="tileset"
+            :selectedTile="selectedTile"
+            :characterSpriteTile="characterSpriteTile"
+            @selectTile="changeSelectedTile($event)"
+          >
+          </tile-menu>
+        </div>
+        <div class="column">
+          <level-canvas
+            :initialWidth="newLevelWidth"
+            :initialHeight="newLevelHeight"
+            :selectedTile="selectedTile"
+            :tileSet="tileset"
+            :characterSpriteTile="characterSpriteTile"
+            @saveLevel="saveLevel()"
+          ></level-canvas>
+        </div>
       </div>
     </div>
   </div>
