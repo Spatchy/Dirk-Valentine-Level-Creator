@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div class="hero is-link">
-      <div class="level is-mobile m-4">
-        <div class="level-left">
-          <div class="level-item">
-            <button @click="goBack()" class="button is-link is-large"><span class="icon is-large"><i class="fas fa-arrow-left"></i></span></button>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="title is-3 is-spaced">{{ newProjectName }}</p>
-            <p class="subtitle is-5">level {{ newLevelNum }}</p>
+    <div class="hero is-link is-small">
+      <div class="hero-body">
+        <div class="level is-mobile m-4">
+          <div class="level-left">
+            <div class="level-item">
+              <button @click="goBack()" class="button is-link is-large"><span class="icon is-large"><i class="fas fa-arrow-left"></i></span></button>
+            </div>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="title is-3 is-spaced">{{ newProjectName }}</p>
+                <p class="subtitle is-5">level {{ newLevelNum }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
