@@ -76,7 +76,7 @@ export default {
   }),
 
   changeBackground: ipcMain.on("CHANGE_BACKGROUND", (event, payload) => {
-    projectHandler.getActiveLevel().toggleInsideOutside()
+    projectHandler.getActiveLevel().toggleInsideOutside(payload)
   }),
 
   getBackGroundImageData: ipcMain.on("GET_BACKGROUND_IMAGE_DATA", (event, payload) => {
@@ -84,6 +84,7 @@ export default {
   }),
 
   getIsOutside: ipcMain.on("GET_IS_OUTSIDE", (event, payload) => {
+    console.log(projectHandler.getActiveLevel().outside)
     event.reply("GET_IS_OUTSIDE", projectHandler.getActiveLevel().outside)
   }),
 

@@ -67,8 +67,12 @@ class levelData {
     console.log("id:" + tileId + " x:" + x + " y:" + y + " Layer: " + layer)
     this.layers[layer][y][x] = tileId
   }
-  toggleInsideOutside() {
-    this.outside = !this.outside
+  toggleInsideOutside(setTo) {
+    if(setTo !== undefined) {
+      this.outside = setTo
+    } else {
+      this.outside = !this.outside
+    }
   }
   setStartPoint(x, y) {
     this.startX = x
