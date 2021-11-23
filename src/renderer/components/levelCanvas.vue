@@ -1,7 +1,7 @@
 <template>
     <canvas-toolbar
       :initialIsOutside="isOutside"
-      :initialNumberOfLayers="numberOfLayers"
+      :numberOfLayers="numberOfLayers"
       :initialWidth="tilesWidth"
       :initialHeight="tilesHeight"
       :hasUnsavedChanges="hasUnsavedChanges"
@@ -94,6 +94,7 @@ export default {
 
     window.ipc.on("OPEN_LEVEL_DATA", response => {
       this.numberOfLayers = response.length
+      console.log(response.length)
       window.ipc.send("GET_IS_OUTSIDE")
       window.ipc.send("GET_START_LOCATION")
       this.$nextTick(() => {

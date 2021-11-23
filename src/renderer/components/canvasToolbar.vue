@@ -81,7 +81,7 @@
 export default {
   props: {
     initialIsOutside: Boolean,
-    initialNumberOfLayers: Number,
+    numberOfLayers: Number,
     initialWidth: Number,
     initialHeight: Number,
     hasUnsavedChanges: Boolean,
@@ -94,6 +94,9 @@ export default {
     "changeHeight",
     "changeWidth",
   ],
+  mounted() {
+    console.log(this.numberOfLayers)
+  },
   data() {
     return {
       backgroundOptions: [
@@ -104,7 +107,6 @@ export default {
         "true": "Outside",
         "false": "Inside"
       },
-      numberOfLayers: null,
       tilesWidth: this.initialWidth,
       tilesHeight: this.initialHeight,
       isOutsideDropdownActive: false,
@@ -116,9 +118,6 @@ export default {
     isOutsideDropdownText() {
       return this.backgroundMap[this.initialIsOutside.toString()]
     }
-  },
-  mounted() {
-    this.numberOfLayers = this.initialNumberOfLayers
   },
   methods: {
     changeBackground(value) {
@@ -134,7 +133,6 @@ export default {
 
     addLayer() {
       this.$emit("addLayer")
-      this.numberOfLayers++
     },
 
     changeWidth() {
