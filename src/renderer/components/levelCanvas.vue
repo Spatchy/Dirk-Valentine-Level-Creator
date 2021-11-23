@@ -4,6 +4,7 @@
       :initialNumberOfLayers="numberOfLayers"
       :initialWidth="tilesWidth"
       :initialHeight="tilesHeight"
+      :hasUnsavedChanges="hasUnsavedChanges"
       @changeWidth="changeWidth($event)"
       @changeHeight="changeHeight($event)"
       @changeBackground="changeBackground($event)"
@@ -69,6 +70,7 @@ export default {
       tilesWidth: this.initialWidth,
       tilesHeight: this.initialHeight,
       isOutside: false,
+      hasUnsavedChanges: false
     }
   },
   emits: [
@@ -126,6 +128,7 @@ export default {
   },
   methods: {
     canvasAction(event) {
+      this.hasUnsavedChanges = true
       const xy = this.getCursorPosition(event)
       const x = xy[0]
       const y = xy[1]
@@ -182,6 +185,7 @@ export default {
     },
 
     addLayer() {
+      this.hasUnsavedChanges = true
       this.numberOfLayers++
       window.ipc.send("ADD_LAYER", "")
     },
@@ -201,9 +205,9 @@ export default {
     },
 
     changeBackground(isOutside) {
-      isOutside = typeof isOutside === "string" ? {"true": true, "false": false}[isOutside.toLowerCase()] : isOutside
+      this.hasUnsavedChanges = true
       this.isOutside = isOutside
-      window.ipc.send("CHANGE_BACKGROUND", "")
+      window.ipc.send("CHANGE_BACKGROUND", isOutside)
       this.paintBackgroundCanvas(isOutside)
     },
 
@@ -270,6 +274,7 @@ export default {
     },
 
     saveLevel() {
+      this.hasUnsavedChanges = false
       this.$emit("saveLevel")
     },
 
@@ -294,6 +299,7 @@ export default {
     },
 
     changeWidth(newTilesWidth) {
+      this.hasUnsavedChanges = true
       const canvasData = this.saveCanvasData()
       this.tilesWidth = newTilesWidth
       window.ipc.send("CHANGE_WIDTH", newTilesWidth)
@@ -302,6 +308,7 @@ export default {
     },
 
     changeHeight(newTilesHeight) {
+      this.hasUnsavedChanges = true
       const canvasData = this.saveCanvasData()
       this.tilesHeight = newTilesHeight
       window.ipc.send("CHANGE_HEIGHT", newTilesHeight)

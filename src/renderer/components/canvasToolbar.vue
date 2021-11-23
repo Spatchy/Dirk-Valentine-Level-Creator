@@ -6,7 +6,7 @@
           <label for="backgroundSelect"><span class="icon"><i class="fas fa-image"></i></span></label>
           <div class="dropdown" :class="{ 'is-active': isOutsideDropdownActive }" @click="isOutsideDropdownActive = !isOutsideDropdownActive">
             <div class="dropdown-trigger">
-              <button class="button is-small mx-1" aria-haspopup="true" aria-controls="dropdown-menu">
+              <button class="button is-small mx-1 outsideDropdown" aria-haspopup="true" aria-controls="dropdown-menu">
                 <span>{{isOutsideDropdownText}}</span>
                 <span class="icon is-small">
                   <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -52,12 +52,26 @@
           </button>
         </div>
         <div class="level-item">
-          <span class="icon"><i class="fas fa-arrows-alt-h"></i></span><input type="number" @change="changeWidth()" v-model="tilesWidth" max="99" class="size-input input is-small"/>
-          <span class="icon"><i class="fas fa-arrows-alt-v"></i></span><input type="number" @change="changeHeight()" v-model="tilesHeight" max="99" class="size-input input is-small"/>
+          <span class="icon">
+            <i class="fas fa-arrows-alt-h"></i>
+          </span>
+          <input type="number" @change="changeWidth()" v-model="tilesWidth" max="99" class="size-input input is-small"/>
+          <span class="icon">
+            <i class="fas fa-arrows-alt-v"></i>
+          </span>
+          <input type="number" @change="changeHeight()" v-model="tilesHeight" max="99" class="size-input input is-small"/>
         </div>
         <div class="level-item">
-          <button @click="saveLevel()" class="button is-small is-success"><span class="icon is-small"><i class="fas fa-save"></i></span><span>save level</span></button>
+          <button @click="saveLevel()" class="button is-small is-success">
+            <span class="icon is-small">
+              <i class="fas fa-save"></i>
+            </span>
+            <span>save level</span>
+          </button>
         </div>
+      </div>
+      <div class="level-right">
+        <p v-if="hasUnsavedChanges" class="tag is-danger">You have unsaved changes</p>
       </div>
     </div>
   </div>
@@ -70,6 +84,7 @@ export default {
     initialNumberOfLayers: Number,
     initialWidth: Number,
     initialHeight: Number,
+    hasUnsavedChanges: Boolean,
   },
   emits: [
     "changeBackground",
@@ -86,27 +101,29 @@ export default {
         {value: false, name: "Inside"},
       ],
       backgroundMap: {
-        true: "Outside",
-        false: "Inside"
+        "true": "Outside",
+        "false": "Inside"
       },
       numberOfLayers: null,
       tilesWidth: this.initialWidth,
       tilesHeight: this.initialHeight,
-      isOutsideDropdownText: null,
       isOutsideDropdownActive: false,
       layerSelectDropdownText: "Layer 1",
       layerSelectDropdownActive: false,
     }
   },
+  computed: {
+    isOutsideDropdownText() {
+      return this.backgroundMap[this.initialIsOutside.toString()]
+    }
+  },
   mounted() {
     this.numberOfLayers = this.initialNumberOfLayers
-    console.log(this.initialWidth)
-    console.log(this.initialHeight)
-    this.isOutsideDropdownText = this.backgroundMap[this.initialIsOutside]
   },
   methods: {
     changeBackground(value) {
-      this.isOutsideDropdownText = this.backgroundMap[value]
+      //this.isOutsideDropdownText = this.backgroundMap[value]
+      console.log(value)
       this.$emit("changeBackground", value)
     },
 
@@ -138,5 +155,9 @@ export default {
 <style lang="scss" scoped>
   .size-input {
     width: 4em;
+  }
+
+  .outsideDropdown {
+    width: 7em;
   }
 </style>
