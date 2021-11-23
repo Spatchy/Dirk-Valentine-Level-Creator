@@ -1,13 +1,35 @@
 <template>
   <div>
-    To start, please select your Flashpoint Core folder. You can download Flashpoint Core from <a href="_blank" @click="openInBrowser(`https://bluemaxima.org/flashpoint/downloads/`)"> the official site </a>
-    <button @click="getDirectoryPath('flashpointPath')">Select Flashpoint Folder</button>
-    <div v-if="flashpointPath">{{flashpointPath}}</div>
-    Please select your SWFtools folder. You can download the latest version from <a href="_blank" @click="openInBrowser(`http://www.swftools.org/swftools-0.9.0.exe`)"></a>
-    <button @click="getDirectoryPath('swftoolsPath')">Select SWFtools Folder</button>
-    <div v-if="swftoolsPath">{{swftoolsPath}}</div>
-    To complete setup, the SWF will be downloaded and extracted
-    <button @click="getSwf()">Complete Setup</button>
+    <div class="hero is-link">
+      <div class="hero-body">
+        <p class="title">Set up DVLC</p>
+        <p class="subtitle">DVLC needs to know where the following programs are installed</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <p class="title is-4">
+        Flashpoint Core
+      </p>
+      <p class="subtitle is-5">Needed to load and play levels</p>
+      <p>You can download Flashpoint Core from <a href="_blank" @click="openInBrowser(`https://bluemaxima.org/flashpoint/downloads/`)"> bluemaxima.org </a></p>
+      <p>Your Flashpoint path is: <span v-if="flashpointPath">{{flashpointPath}}</span><span v-if="!flashpointPath" class="has-text-danger">not set</span></p>
+      <button @click="getDirectoryPath('flashpointPath')" class="button is-link">Select Flashpoint Folder</button>
+    </div>
+
+    <div class="section">
+      <p class="title is-4">
+        SWFTools
+      </p>
+      <p class="subtitle is-5">Needed to extract assets from the Dirk Valentine flash file</p>
+      <p>You can download the SWFTools from <a href="_blank" @click="openInBrowser(`http://www.swftools.org/swftools-0.9.0.exe`)">swftools.org</a></p>
+      <p>Your SWFTools path is: <span v-if="swftoolsPath">{{swftoolsPath}}</span><span v-if="!swftoolsPath" class="has-text-danger">not set</span></p>
+      <button @click="getDirectoryPath('swftoolsPath')" class="button is-link">Select SWFtools Folder</button>
+    </div>
+    <div class="section">
+      <p>To complete setup, the SWF will be downloaded and extracted</p>
+      <button @click="getSwf()" class="button is-success" :disabled="!(swftoolsPath && flashpointPath)">Complete Setup</button>
+    </div>
   </div>
 </template>
 
@@ -20,9 +42,16 @@ export default {
       swftoolsPath: null, //for future user feedback use
     }
   },
+  emits: [
+    "completeSetup"
+  ],
   mounted() {
     window.ipc.on("OPEN_FILE_DIALOG", (response) => {
-      alert(response);
+      if(this.settingToChange == "flashpointPath") {
+        this.flashpointPath = response
+      } else if (this.settingToChange == "swftoolsPath") {
+        this.swftoolsPath = response
+      }
       window.ipc.send("UPDATE_SETTING", [this.settingToChange, response]);
     })
   },
@@ -42,6 +71,7 @@ export default {
 
     getSwf() {
       window.ipc.send("DOWNLOAD_EXTRACT_SWF", "");
+      this.$emit("completeSetup")
     }
   }
 }
