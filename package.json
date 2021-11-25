@@ -1,5 +1,5 @@
 {
-  "name": "dirk-valentine-level-creator",
+  "name": "dvlc",
   "version": "0.1.0",
   "private": true,
   "description": "An app for creating and editing Dirk Valentine levels",
@@ -80,7 +80,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "dirk_valentine_level_creator"
+            "name": "dvlc"
           }
         },
         {
