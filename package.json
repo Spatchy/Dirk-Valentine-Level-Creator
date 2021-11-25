@@ -2,20 +2,21 @@
   "name": "dirk-valentine-level-creator",
   "version": "0.1.0",
   "private": true,
-  "author": {"name": "Spatchy"},
   "description": "An app for creating and editing Dirk Valentine levels",
-  "type": "module",
+  "author": {
+    "name": "Spatchy"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve --experimental-modules",
+    "make": "electron-forge make",
+    "package": "electron-forge package",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "start": "electron-forge start"
   },
   "main": "src/main/background.js",
   "dependencies": {
@@ -40,12 +41,12 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.61",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
-    "@vue/cli-plugin-babel": "~5.0.0-rc.0",
-    "@vue/cli-plugin-eslint": "~5.0.0-rc.0",
-    "@vue/cli-service": "~5.0.0-rc.0",
+    "@vue/cli-plugin-babel": "~5.0.0-rc.1",
+    "@vue/cli-plugin-eslint": "~5.0.0-rc.1",
+    "@vue/cli-service": "~5.0.0-rc.1",
     "@vue/compiler-sfc": "^3.0.0",
     "css-loader": "^6.5.1",
-    "electron": "^13.0.0",
+    "electron": "^13.6.2",
     "electron-devtools-installer": "^3.1.0",
     "electron-rebuild": "^3.2.3",
     "eslint-plugin-vue": "^7.0.0",
@@ -98,5 +99,6 @@
         }
       ]
     }
-  }
+  },
+  "type": "module"
 }
