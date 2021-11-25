@@ -4,7 +4,7 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 import path from "path"
-require("./ipcHandler")
+import ipcHandler from './ipcHandler' // needed despite being unused in code
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
