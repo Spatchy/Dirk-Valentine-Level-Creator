@@ -1,4 +1,4 @@
-const pty = require("node-pty");
+import * as pty  from "node-pty"
 import os from "os";
 import settingsManager from "./settingsManager";
 import fs from "fs";
