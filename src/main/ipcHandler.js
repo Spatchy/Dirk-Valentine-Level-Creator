@@ -50,7 +50,7 @@ export default {
   }),
 
   getTiles: ipcMain.on("GET_TILES", (event, payload) => {
-    tileHandler.tileLibrary.forEach(tile => {
+    tileHandler.getTileLibrary().forEach(tile => {
       event.reply("GET_TILES", tile);
     });
   }),
