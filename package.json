@@ -12,7 +12,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "electron:build": "vue-cli-service electron:build",
-    "electron:serve": "vue-cli-service electron:serve --experimental-modules",
+    "electron:serve": "vue-cli-service electron:serve",
     "make": "electron-forge make",
     "package": "electron-forge package",
     "postinstall": "electron-builder install-app-deps",
