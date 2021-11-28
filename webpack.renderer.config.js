@@ -54,14 +54,6 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin(),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, "./src/renderer/assets/webfonts"),
-          to: path.resolve(__dirname, "./.webpack/renderer/main/webfonts")
-        },
-      ],
-    }),
   ],
   resolve: {
     extensions: [".js", ".scss"]
