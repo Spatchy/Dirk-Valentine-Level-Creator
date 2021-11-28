@@ -1,7 +1,7 @@
 const { get } = require('http')
 const fs = require('fs')
 const settingsManager = require('./settingsManager')
-const {v4 : uuid} = require("uuid")
+const {v4: uuid} = require("uuid")
 const yaml = require("js-yaml")
 const sudo = require("sudo-prompt")
 const JSZip = require('jszip')
