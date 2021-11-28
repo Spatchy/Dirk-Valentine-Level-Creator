@@ -1,5 +1,5 @@
-import fs from "fs";
-import {app} from "electron";
+const fs = require("fs")
+const {app} = require("electron")
 
 const appdata = app.getPath('userData');
 const settingsFile = appdata + "/settings.json"
@@ -38,7 +38,7 @@ const xmlNamesMap = [
   "24173bd5e560c4e9a09ff638048fd7f2.xml",
 ]
 
-export default {
+module.exports = {
 
   appdata, xmlNamesMap,
 

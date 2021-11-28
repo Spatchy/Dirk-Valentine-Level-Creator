@@ -1,7 +1,7 @@
-import * as pty  from "node-pty"
-import os from "os";
-import settingsManager from "./settingsManager";
-import fs from "fs";
+const pty = require("node-pty")
+const os = require("os")
+const settingsManager = require("./settingsManager")
+const fs = require("fs")
 
 const shell = os.platform() === 'win32' ? 'powershell.exe' : 'bash';
 
@@ -20,7 +20,7 @@ function buildCmdString(letter, id, fileExt) {
   return `./swfextract -${letter} ${id} "${settingsManager.appdata}/projects/dirkvalentine.swf" -o "${extractFolder}/${id}.${fileExt}" \r`;
 }
 
-export default {
+module.exports = {
   setPtyLocation(dir) {
     ptyProcess.write(`cd "${dir}" \r`);
     const listener = ptyProcess.onData((data) => {

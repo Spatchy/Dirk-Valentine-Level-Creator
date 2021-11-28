@@ -1,5 +1,5 @@
-import miscAssetHandler from "./miscAssetHandler";
-import sharp from "sharp";
+const miscAssetHandler = require("./miscAssetHandler")
+const sharp = require("sharp")
 
 class Tile {
   constructor(number, name, baseLayer, additionalLayers = [], width = 1, height = 1, rotate = 0, flipHorizontal = false, flipVertical = false) {
@@ -425,6 +425,6 @@ function getTileLibrary() {
     new Tile(352, "partially-armored-center-armor-e", "1379.png"), // /basic 345-352
   ]
 }
-export default {
+module.exports = {
   Tile, getTileLibrary
 }

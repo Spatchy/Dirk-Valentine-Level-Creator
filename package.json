@@ -6,7 +6,6 @@
   "author": {
     "name": "Spatchy"
   },
-  "type": "module",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -17,9 +16,9 @@
     "package": "electron-forge package",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "start": "electron-forge start"
+    "start": "electron-forge start --inspect-electron"
   },
-  "main": "src/main/background.js",
+  "main": "./.webpack/main",
   "dependencies": {
     "bulma": "^0.9.3",
     "core-js": "^3.6.5",
@@ -32,28 +31,42 @@
     "sharp": "^0.29.3",
     "sudo-prompt": "^9.2.1",
     "uuid": "^8.3.2",
-    "vue": "^3.0.0",
+    "vue": "^3.2.23",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
     "@babel/eslint-parser": "^7.5.4",
+    "@babel/preset-env": "^7.16.4",
     "@electron-forge/cli": "^6.0.0-beta.61",
     "@electron-forge/maker-deb": "^6.0.0-beta.61",
     "@electron-forge/maker-rpm": "^6.0.0-beta.61",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.61",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "@vue/cli-plugin-babel": "~5.0.0-rc.1",
     "@vue/cli-plugin-eslint": "~5.0.0-rc.1",
     "@vue/cli-service": "~5.0.0-rc.1",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/compiler-sfc": "^3.2.23",
+    "babel-loader": "^8.2.3",
+    "copy-webpack-plugin": "^10.0.0",
     "css-loader": "^6.5.1",
     "electron": "^13.6.2",
     "electron-devtools-installer": "^3.1.0",
     "electron-rebuild": "^3.2.3",
     "eslint-plugin-vue": "^7.0.0",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "node-loader": "^2.0.0",
     "node-sass": "^6.0.1",
     "sass-loader": "^12.3.0",
-    "vue-cli-plugin-electron-builder": "^2.1.1"
+    "url-loader": "^4.1.1",
+    "vue-cli-plugin-electron-builder": "^2.1.1",
+    "vue-loader": "^16.8.3",
+    "vue-style-loader": "^4.1.3",
+    "vue-template-compiler": "^2.6.14",
+    "webpack-node-externals": "^3.0.0"
   },
   "eslintConfig": {
     "root": true,
@@ -77,6 +90,27 @@
   "config": {
     "forge": {
       "packagerConfig": {},
+      "plugins": [
+        [
+          "@electron-forge/plugin-webpack",
+          {
+            "mainConfig": "./webpack.main.config.js",
+            "renderer": {
+              "config": "./webpack.renderer.config.js",
+              "entryPoints": [
+                {
+                  "name": "main",
+                  "html": "./public/index.html",
+                  "js": "./src/renderer/main.js",
+                  "preload": {
+                    "js": "./public/preload"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ],
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -106,7 +140,9 @@
       "electronBuilder": {
         "mainProcessFile": "src/main/background.js",
         "rendererProcessFile": "src/renderer/main.js",
-        "externals":["node-pty"]
+        "externals": [
+          "node-pty"
+        ]
       }
     },
     "css": {

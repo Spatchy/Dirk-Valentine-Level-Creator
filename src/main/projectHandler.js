@@ -1,5 +1,5 @@
-import fs from "fs"
-import settingsManager from "./settingsManager"
+const fs = require("fs")
+const settingsManager = require("./settingsManager")
 
 const workingProjectsDir = settingsManager.appdata + "/projects/working"
 
@@ -136,7 +136,7 @@ class levelData {
 
 let activeLevel = null;
 
-export default {
+module.exports = {
   getActiveLevel() {
     return activeLevel
   },

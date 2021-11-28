@@ -1,11 +1,11 @@
-import { get } from 'http'
-import fs from 'fs'
-import settingsManager from './settingsManager'
-import {v4 as uuid} from "uuid"
-import yaml from "js-yaml"
-import sudo from "sudo-prompt"
-import JSZip from 'jszip'
-import { Console } from 'console'
+const { get } = require('http')
+const fs = require('fs')
+const settingsManager = require('./settingsManager')
+const {v4} = require("uuid")
+const uuid = v4
+const yaml = require("js-yaml")
+const sudo = require("sudo-prompt")
+const JSZip = require('jszip')
 
 const location = settingsManager.appdata + "/projects/"
 
@@ -42,7 +42,7 @@ class YamlTemplate {
   }
 }
 
-export default {
+module.exports = {
   downloadSwf(callback) {
     if (!fs.existsSync(location)){
       fs.mkdirSync(location);

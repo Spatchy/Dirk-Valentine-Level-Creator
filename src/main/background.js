@@ -1,10 +1,9 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
-import path from "path"
-import ipcHandler from './ipcHandler' // needed despite being unused in code
+const { app, protocol, BrowserWindow } = require('electron')
+const path = require("path")
+const createProtocol = require('./createProtocol')
+require('./ipcHandler') // needed despite being unused in code
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -25,7 +24,7 @@ async function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
-      preload: path.resolve(__static, 'preload.js')
+      preload: MAIN_PRELOAD_WEBPACK_ENTRY
     }
   })
   win.maximize()
@@ -37,7 +36,7 @@ async function createWindow() {
   } else {
     createProtocol('app')
     // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    win.loadURL(MAIN_WEBPACK_ENTRY)
   }
 }
 
@@ -60,14 +59,6 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    try {
-      await installExtension(VUEJS3_DEVTOOLS)
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString())
-    }
-  }
   createWindow()
 })
 

@@ -26,3 +26,4 @@ pnpm-debug.log*
 /dist_electron
 /dirk-valentine-level-creator-win32-x64
 /out
+/.webpack

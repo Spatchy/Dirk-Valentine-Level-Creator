@@ -1,5 +1,5 @@
-import settingsManager from "./settingsManager"
-import fs from "fs"
+const settingsManager = require("./settingsManager")
+const fs = require("fs")
 
 const extractPath = settingsManager.appdata + "/projects/extract"
 const emptyB64Image = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
@@ -27,7 +27,7 @@ function pathArrToBase64(pathArr) {
   return b64Arr
 }
 
-export default {
+module.exports = {
   mkPath, pathToBase64, pathArrToBase64,
 
   returnBackgroundImages() {

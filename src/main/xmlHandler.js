@@ -1,11 +1,11 @@
-import fs from "fs"
-import { xml2js, js2xml } from "xml-js";
-import settingManager from "./settingsManager"
+const fs = require("fs")
+const { xml2js, js2xml } = require("xml-js")
+const settingManager = require("./settingsManager")
 
 const projectPath = settingManager.appdata + "/projects"
 
 
-export default {
+module.exports = {
   saveLevelData(levelData, project, levelNum) {
     const layers = levelData.getLevelLayers()
     const meta = levelData.getLevelMeta()

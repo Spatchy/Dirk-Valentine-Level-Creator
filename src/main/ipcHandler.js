@@ -1,14 +1,14 @@
-import { shell, ipcMain, dialog, mainWindow } from "electron"
-import settingsManager from "./settingsManager";
-import swfHandler from "./swfHandler";
-import Path from "path";
-import ptyHandler from "./ptyHandler";
-import tileHandler from "./tileHandler";
-import projectHandler from "./projectHandler";
-import xmlHandler from "./xmlHandler";
-import miscAssetHandler from "./miscAssetHandler";
+const { shell, ipcMain, dialog, mainWindow } = require("electron")
+const settingsManager = require("./settingsManager")
+const swfHandler = require("./swfHandler")
+const Path = require("path")
+const ptyHandler = require("./ptyHandler")
+const tileHandler = require("./tileHandler")
+const projectHandler = require("./projectHandler")
+const xmlHandler = require("./xmlHandler")
+const miscAssetHandler = require("./miscAssetHandler")
 
-export default {
+module.exports = {
 
   openExternal: ipcMain.on("OPEN_EXTERNAL", (event, payload) => {
     shell.openExternal(payload);
