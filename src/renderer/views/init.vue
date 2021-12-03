@@ -59,7 +59,6 @@ export default {
   methods: {
     openInBrowser(uri) {
       window.ipc.send("OPEN_EXTERNAL", uri);
-      alert(uri);
     },
 
     getDirectoryPath(dirToGet) {
