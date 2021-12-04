@@ -306,6 +306,7 @@ export default {
       window.ipc.send("CHANGE_WIDTH", newTilesWidth)
       this.paintBackgroundCanvas(this.isOutside)
       this.repaintCanvasesFromData(canvasData)
+      window.ipc.send("GET_START_LOCATION")
     },
 
     changeHeight(newTilesHeight) {
@@ -315,6 +316,7 @@ export default {
       window.ipc.send("CHANGE_HEIGHT", newTilesHeight)
       this.paintBackgroundCanvas(this.isOutside)
       this.repaintCanvasesFromData(canvasData)
+      window.ipc.send("GET_START_LOCATION")
     }
   }
 }
