@@ -12,7 +12,7 @@
         Flashpoint Core
       </p>
       <p class="subtitle is-5">Needed to load and play levels</p>
-      <p>You can download Flashpoint Core from <a href="_blank" @click="openInBrowser(`https://bluemaxima.org/flashpoint/downloads/`)"> bluemaxima.org </a></p>
+      <p>You can download Flashpoint Core from <a href="#" @click="openInBrowser(`https://bluemaxima.org/flashpoint/downloads/`)"> bluemaxima.org </a></p>
       <p>Your Flashpoint path is: <span v-if="flashpointPath">{{flashpointPath}}</span><span v-if="!flashpointPath" class="has-text-danger">not set</span></p>
       <button @click="getDirectoryPath('flashpointPath')" class="button is-link">Select Flashpoint Folder</button>
     </div>
@@ -22,7 +22,7 @@
         SWFTools
       </p>
       <p class="subtitle is-5">Needed to extract assets from the Dirk Valentine flash file</p>
-      <p>You can download the SWFTools from <a href="_blank" @click="openInBrowser(`http://www.swftools.org/swftools-0.9.0.exe`)">swftools.org</a></p>
+      <p>You can download the SWFTools from <a href="#" @click="openInBrowser(`http://www.swftools.org/swftools-0.9.0.exe`)">swftools.org</a></p>
       <p>Your SWFTools path is: <span v-if="swftoolsPath">{{swftoolsPath}}</span><span v-if="!swftoolsPath" class="has-text-danger">not set</span></p>
       <button @click="getDirectoryPath('swftoolsPath')" class="button is-link">Select SWFtools Folder</button>
     </div>
