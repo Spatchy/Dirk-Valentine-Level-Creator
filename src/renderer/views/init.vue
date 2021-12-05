@@ -76,10 +76,10 @@ export default {
       this.isLoading = true
       setTimeout(() => {
         this.msg = "Extracting..."
-      }, 2500)
+      }, 4500)
       setTimeout(() => { // allow time for extraction to occur
         this.$emit("completeSetup")
-      }, 11000)
+      }, 18500)
     }
   }
 }
