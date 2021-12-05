@@ -28,7 +28,8 @@
     </div>
     <div class="section">
       <p>To complete setup, the SWF will be downloaded and extracted</p>
-      <button @click="getSwf()" class="button is-success" :disabled="!(swftoolsPath && flashpointPath)">Complete Setup</button>
+      <button @click="getSwf()" class="button is-success" :class="{'is-loading':isLoading}" :disabled="!(swftoolsPath && flashpointPath)">Complete Setup</button>
+      <p v-if="isLoading">{{msg}}</p>
     </div>
   </div>
 </template>
@@ -38,8 +39,10 @@ export default {
   data() {
     return {
       settingToChange:"",
-      flashpointPath: null,  //for future user feedback use
-      swftoolsPath: null, //for future user feedback use
+      flashpointPath: null,
+      swftoolsPath: null,
+      isLoading: false,
+      msg: "Downloading..."
     }
   },
   emits: [
@@ -70,7 +73,13 @@ export default {
 
     getSwf() {
       window.ipc.send("DOWNLOAD_EXTRACT_SWF", "");
-      this.$emit("completeSetup")
+      this.isLoading = true
+      setTimeout(() => {
+        this.msg = "Extracting..."
+      }, 2500)
+      setTimeout(() => { // allow time for extraction to occur
+        this.$emit("completeSetup")
+      }, 11000)
     }
   }
 }
