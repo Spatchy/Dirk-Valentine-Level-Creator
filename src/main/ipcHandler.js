@@ -96,6 +96,7 @@ module.exports = {
 
   getProjects: ipcMain.on("GET_PROJECTS", (event, payload) => {
     const projectsList = projectHandler.returnProjectsList()
+    tileHandler.buildTileLibrary()
     event.reply("GET_PROJECTS", projectsList)
   }),
 
