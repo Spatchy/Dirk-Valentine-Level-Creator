@@ -6,6 +6,9 @@ The program works on 64-bit versions of Windows.
 Download the `DVLC-win32-x64` zip from the releases page.
 Simply extract the zip file and run DVLC.exe - You can then follow the instructions in the app.
 
+## Sharing Levels
+If you would like to share levels, export your project as a .dvpack file. You can then share it in the `#dvlc-level-share` channel in [my discord](https://discord.gg/aVFHHwK3)
+
 ## Contributing
 **If you are a developer and would like to contribute to the project:**
 - You need to have Node.JS installed
